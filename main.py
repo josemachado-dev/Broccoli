@@ -1,30 +1,35 @@
 #External libraries
-from tkinter import *
+import tkinter as tk
 
 #Each obj on the list is a full line on the table
 #Each line is as follows
 #Index | Text  | Category
 phrasesdb = []
 
+#This serves merly to test new functions, and see if they're being called when they should
+def debug(event):
+    print("the function is working")
+
 
 #Add obj to list
 def addline():
     ##This creates new obj with values from the input fields, and inserts it in the list
-    phrasesdb.append({"text": newtext.get(), "category": newcategory.get()})
+    newobj = {"text": newtext.get(), "category": newcategory.get()}
+    phrasesdb.append(newobj)
     
     ##This shows new obj on the table
-    newesttext = Label(tableframe, text=newtext.get())
-    newestcategory = Label(tableframe, text=newcategory.get())
+    newesttext = tk.Label(tableframe, text=newobj["text"])
+    newestcategory = tk.Label(tableframe, text=newobj["category"])
 
-    newesttext.grid(row=len(phrasesdb), column=1, sticky=W)
-    newestcategory.grid(row=len(phrasesdb), column=2, sticky=W)
+    newesttext.grid(row=len(phrasesdb), column=1, sticky=tk.W)
+    newestcategory.grid(row=len(phrasesdb), column=2, sticky=tk.W)
 
     ##This clears the input flields
-    newtext.delete(0, END)
-    newcategory.delete(0, END)
+    newtext.delete(0, tk.END)
+    newcategory.delete(0, tk.END)
 
     ##This pushes the input fields to the bottom of the list
-    nextindex = Label(tableframe, text=(len(phrasesdb)))
+    nextindex = tk.Label(tableframe, text=(len(phrasesdb)))
     nextindex.grid(row=(len(phrasesdb)+1))
     newtext.grid(row=(len(phrasesdb)+1), column=1)
     newcategory.grid(row=(len(phrasesdb)+1), column=2)
@@ -45,18 +50,18 @@ def removeline(n):
 
 
 #Definition of root window
-rootwindow = Tk()
+rootwindow = tk.Tk()
 rootwindow.title("improved-broccoli")
 
 
 ##Table showing content
-tableframe = Frame(rootwindow)
-tableframe.pack(fill=X)
+tableframe = tk.Frame(rootwindow)
+tableframe.pack(fill=tk.X)
 
 ##This creates the title of the table
-indextitle = Label(tableframe, text="index")
-texttitle = Label(tableframe, text="text")
-categorytitle = Label(tableframe, text="category")
+indextitle = tk.Label(tableframe, text="index")
+texttitle = tk.Label(tableframe, text="text")
+categorytitle = tk.Label(tableframe, text="category")
 
 indextitle.grid(row=0)
 texttitle.grid(row=0, column=1)
@@ -67,10 +72,10 @@ categorytitle.grid(row=0, column=2)
     ###############################################
 
 ##This creates the first input fields
-nextindex = Label(tableframe, text=(len(phrasesdb)))
-newtext = Entry(tableframe)
-newcategory = Entry(tableframe)
-addlinebutton = Button(tableframe, text=" + ", command=addline)
+nextindex = tk.Label(tableframe, text=(len(phrasesdb)))
+newtext = tk.Entry(tableframe)
+newcategory = tk.Entry(tableframe)
+addlinebutton = tk.Button(tableframe, text=" + ", command=addline)
 
 nextindex.grid(row=(len(phrasesdb)+1))
 newtext.grid(row=(len(phrasesdb)+1), column=1)
