@@ -24,7 +24,7 @@ def addline():
     newcategory.delete(0, END)
 
     ##This pushes the input fields to the bottom of the list
-    nextindex = Label(tableframe, text=(len(phrasesdb)+1))
+    nextindex = Label(tableframe, text=(len(phrasesdb)))
     nextindex.grid(row=(len(phrasesdb)+1))
     newtext.grid(row=(len(phrasesdb)+1), column=1)
     newcategory.grid(row=(len(phrasesdb)+1), column=2)
@@ -67,7 +67,7 @@ categorytitle.grid(row=0, column=2)
     ###############################################
 
 ##This creates the first input fields
-nextindex = Label(tableframe, text=(len(phrasesdb)+1))
+nextindex = Label(tableframe, text=(len(phrasesdb)))
 newtext = Entry(tableframe)
 newcategory = Entry(tableframe)
 addlinebutton = Button(tableframe, text=" + ", command=addline)
@@ -76,6 +76,7 @@ nextindex.grid(row=(len(phrasesdb)+1))
 newtext.grid(row=(len(phrasesdb)+1), column=1)
 newcategory.grid(row=(len(phrasesdb)+1), column=2)
 addlinebutton.grid(row=(len(phrasesdb)+1), column=3)
+
 
 #Root Window draw
 rootwindow.mainloop()
