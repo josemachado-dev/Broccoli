@@ -3,167 +3,198 @@ import tkinter as tk
 import json
 import webbrowser
 
-#Each obj on the list is a full line on the table
-#Each line is as follows
-#Index | Text  | Category
-phrasesdb = []
+class DB:
+    def __init__(self):
+        self.currentfilename = "autosave.json"
+        self.savedbefore = False
+        self.phrases = []
 
-#This serves merly to test new functions, and see if they're being called when they should
-def debugevent(event):
-    print("debug event was called")
-def debug():
-    print("debug was called")
+    def save(self, filename=None):
+        with open(filename if filename is not None else self.currentfilename, "w") as file:
+            json.dump(self.phrases, file, indent=2)
 
-def savefile():
-    with open("savefile.json", "w") as file:
-        json.dump(phrasesdb, file, indent=2)
+class Broccoli:
+    #This serves merly to test new functions, and see if they're being called when they should
+    def debugevent(self, event):
+        print("debug event was called")
 
-def exitapp():
-    rootwindow.destroy()
+    def debug(self):
+        print("debug was called")
 
-def showdocumentation():
-    #url should be updated if documentation changes places, for example, a wiki is created
-    webbrowser.open("https://github.com/josemachado-dev/improved-broccoli", new=2, autoraise=True)
+    #Each obj on the list is a full line on the table
+    #Each line is as follows
+    #Index | Text  | Category
+    def __init__(self, db):
+        self.phrasesdb = db.phrases
+        self.db = db
 
-#Add obj to list
-def addline():
-    ##This creates new obj with values from the input fields, and inserts it in the list
-    newobj = {"text": newtext.get(), "category": newcategory.get()}
-    phrasesdb.append(newobj)
-    
-    ##This shows new obj on the table
-    newesttext = tk.Label(tableframe, text=newobj["text"])
-    newestcategory = tk.Label(tableframe, text=newobj["category"])
+        #Definition of root window
+        self.rootwindow = tk.Tk()
+        self.rootwindow.title("improved-broccoli")
 
-    ##This will allow to edit the line, eventually
-    ### preferebly this would go on a different function
-    newesttext.bind("<Double-Button-1>", beginedit)
-    newestcategory.bind("<Double-Button-1>", beginedit)
+        self.createmenu()
 
-    newesttext.grid(row=len(phrasesdb), column=1, sticky=tk.W)
-    newestcategory.grid(row=len(phrasesdb), column=2, sticky=tk.W)
+        #Table showing content
+        self.tableframe = tk.Frame(self.rootwindow)
+        self.tableframe.pack(fill=tk.X)
 
-    ##This clears the input flields
-    newtext.delete(0, tk.END)
-    newcategory.delete(0, tk.END)
+        ##This creates the title of the table
+        self.indextitle = tk.Label(self.tableframe, text="index")
+        self.texttitle = tk.Label(self.tableframe, text="text")
+        self.categorytitle = tk.Label(self.tableframe, text="category")
 
-    ##This pushes the input fields to the bottom of the list
-    nextindex = tk.Label(tableframe, text=(len(phrasesdb)))
-    nextindex.grid(row=(len(phrasesdb)+1))
-    newtext.grid(row=(len(phrasesdb)+1), column=1)
-    newcategory.grid(row=(len(phrasesdb)+1), column=2)
-    addlinebutton.grid(row=(len(phrasesdb)+1), column=3)
+        self.indextitle.grid(row=0)
+        self.texttitle.grid(row=0, column=1)
+        self.categorytitle.grid(row=0, column=2)
 
-#Add all the objs from another list to this list
-##Not sure why I would want this, yet. Maybe to allow merging of lists?
-def addmultiple(list):
-    phrasesdb.extend(list)
+            ###############################################
+            # The new objs from the list go in the middle #
+            ###############################################
 
-#Edit obj in list, given it's index
-def beginedit(event):
-    ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
-    row = event.widget.grid_info()["row"]
+        ##This creates the first input fields
+        self.nextindex = tk.Label(self.tableframe, text=(len(self.phrasesdb)))
+        self.newtext = tk.Entry(self.tableframe)
+        self.newcategory = tk.Entry(self.tableframe)
+        self.addlinebutton = tk.Button(self.tableframe, text=" + ", command=self.addline)
 
-    ##This delets the labels on the row to be edited, to give space for input fields, but keeps the index shown
-    for label in tableframe.grid_slaves():
-        if int(label.grid_info()["row"]) == row and int(label.grid_info()["column"]) > 0:
-            label.grid_forget()
+        self.nextindex.grid(row=(len(self.phrasesdb)+1))
+        self.newtext.grid(row=(len(self.phrasesdb)+1), column=1)
+        self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
+        self.addlinebutton.grid(row=(len(self.phrasesdb)+1), column=3)
 
-    ##This creates the entrys for the new inputs
-    edittext = tk.Entry(tableframe)
-    editcategory = tk.Entry(tableframe)
-    #editlinebutton = tk.Button(tableframe, text="edit", command=editline)
-    editlinebutton = tk.Button(tableframe, text="edit")
+        #Lower Status Bar
+        ##############################
+        # I have to do it eventually #
+        ##############################
 
-    edittext.grid(row=row, column=1)
-    editcategory.grid(row=row, column=2)
-    editlinebutton.grid(row=row, column=3)
+        #Root Window draw
+        self.rootwindow.mainloop()
 
-'''
-def editline(event):
-    ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
-    row = event.widget.grid_info()["row"]
-    index = row - 1
-    phrasesdb[index].update({"text": edittext.get(), "category": editcategory.get()})
-    editobj = phrasesdb[index]
+    def savefile(self):
+        self.db.save()
 
-    ##This delets the entrys on the row to be edited, to give space for new labels
-    for entry in tableframe.grid_slaves():
-        if int(entry.grid_info()["row"]) == row and int(entry.grid_info()["column"]) > 0:
-            entry.grid_forget()
-
-    ##This shows edited obj on the table
-    editedtext = tk.Label(tableframe, text=editobj["text"])
-    editedcategory = tk.Label(tableframe, text=editobj["category"])
-
-    editedtext.bind("<Double-Button-1>", beginedit)
-    editedcategory.bind("<Double-Button-1>", beginedit)
-
-    editedtext.grid(row=len(phrasesdb), column=1, sticky=tk.W)
-    editedcategory.grid(row=len(phrasesdb), column=2, sticky=tk.W)
-'''
-
-#Remove obj from list, given it's index
-def removeline(n):
-    phrasesdb.remove(phrasesdb[n])
+#        if self.db.savedbefore:
+#            self.db.save()
+#        else:
+#            self.savefileas()
 
 
-#Definition of root window
-rootwindow = tk.Tk()
-rootwindow.title("improved-broccoli")
+#   def savefileas(self):
+#       filename = "hello.json" #Do interface
+#       f = tk.filedialog.asksaveasfilename(filetypes=("json", "*.json"))
+#       if f is None: # asksaveasfile return `None` if dialog closed with "cancel".
+#           return
+#       f.close()
+#
+#       self.db.currentfilename = filename
+#       self.db.savedbefore = True
+#       self.db.save(filename)
 
-#Top Menu
-menu = tk.Menu(rootwindow)
-rootwindow.config(menu=menu)
 
-filesubmenu = tk.Menu(menu, tearoff=0)
-menu.add_cascade(label="File", menu=filesubmenu)
-filesubmenu.add_command(label="New File", command=debug) #Remove debug, put actual function
-filesubmenu.add_separator()
-filesubmenu.add_command(label="Open", command=debug) #Remove debug, put actual function
-filesubmenu.add_separator()
-filesubmenu.add_command(label="Save", command=savefile)
-filesubmenu.add_command(label="Save As", command=debug) #Remove debug, put actual function
-filesubmenu.add_separator()
-filesubmenu.add_command(label="Exit", command=exitapp)
+    def exitapp(self):
+        self.rootwindow.destroy()
 
-helpmenu = tk.Menu(menu, tearoff=0)
-menu.add_cascade(label="Help", menu=helpmenu)
-helpmenu.add_command(label="Report a Bug", command=debug)
-helpmenu.add_command(label="Check documentation", command=showdocumentation)
+    def showdocumentation(self):
+        #url should be updated if documentation changes places, for example, a wiki is created
+        webbrowser.open("https://github.com/josemachado-dev/improved-broccoli", new=2, autoraise=True)
 
-#Table showing content
-tableframe = tk.Frame(rootwindow)
-tableframe.pack(fill=tk.X)
+    #Add obj to list
+    def addline(self):
+        ##This creates new obj with values from the input fields, and inserts it in the list
+        newobj = {"text": self.newtext.get(), "category": self.newcategory.get()}
+        self.phrasesdb.append(newobj)
 
-##This creates the title of the table
-indextitle = tk.Label(tableframe, text="index")
-texttitle = tk.Label(tableframe, text="text")
-categorytitle = tk.Label(tableframe, text="category")
+        ##This shows new obj on the table
+        newesttext = tk.Label(self.tableframe, text=newobj["text"])
+        newestcategory = tk.Label(self.tableframe, text=newobj["category"])
 
-indextitle.grid(row=0)
-texttitle.grid(row=0, column=1)
-categorytitle.grid(row=0, column=2)
+        ##This will allow to edit the line, eventually
+        ### preferebly this would go on a different function
+        newesttext.bind("<Double-Button-1>", self.beginedit)
+        newestcategory.bind("<Double-Button-1>", self.beginedit)
 
-    ###############################################
-    # The new objs from the list go in the middle #
-    ###############################################
+        newesttext.grid(row=len(self.phrasesdb), column=1, sticky=tk.W)
+        newestcategory.grid(row=len(self.phrasesdb), column=2, sticky=tk.W)
 
-##This creates the first input fields
-nextindex = tk.Label(tableframe, text=(len(phrasesdb)))
-newtext = tk.Entry(tableframe)
-newcategory = tk.Entry(tableframe)
-addlinebutton = tk.Button(tableframe, text=" + ", command=addline)
+        ##This clears the input flields
+        self.newtext.delete(0, tk.END)
+        self.newcategory.delete(0, tk.END)
 
-nextindex.grid(row=(len(phrasesdb)+1))
-newtext.grid(row=(len(phrasesdb)+1), column=1)
-newcategory.grid(row=(len(phrasesdb)+1), column=2)
-addlinebutton.grid(row=(len(phrasesdb)+1), column=3)
+        ##This pushes the input fields to the bottom of the list
+        nextindex = tk.Label(self.tableframe, text=(len(self.phrasesdb)))
+        nextindex.grid(row=(len(self.phrasesdb)+1))
+        self.newtext.grid(row=(len(self.phrasesdb)+1), column=1)
+        self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
+        self.addlinebutton.grid(row=(len(self.phrasesdb)+1), column=3)
 
-#Lower Status Bar
-##############################
-# I have to do it eventually #
-##############################
+    #Edit obj in list, given it's index
+    def beginedit(self, event):
+        ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
+        row = event.widget.grid_info()["row"]
 
-#Root Window draw
-rootwindow.mainloop()
+        ##This delets the labels on the row to be edited, to give space for input fields, but keeps the index shown
+        for label in self.tableframe.grid_slaves():
+            if int(label.grid_info()["row"]) == row and int(label.grid_info()["column"]) > 0:
+                label.grid_forget()
+
+        ##This creates the entrys for the new inputs
+        edittext = tk.Entry(self.tableframe)
+        editcategory = tk.Entry(self.tableframe)
+        editlinebutton = tk.Button(self.tableframe, text="edit")
+        editlinebutton.bind("<Button-1>", lambda event: self.editline(event, edittext, editcategory))
+
+        edittext.grid(row=row, column=1)
+        editcategory.grid(row=row, column=2)
+        editlinebutton.grid(row=row, column=3)
+
+    #Commits the edit
+    def editline(self, event, edittext, editcategory):
+        ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
+        row = event.widget.grid_info()["row"]
+        index = row - 1
+        self.phrasesdb[index].update({"text": edittext.get(), "category": editcategory.get()})
+        editobj = self.phrasesdb[index]
+
+        ##This delets the entrys on the row to be edited, to give space for new labels
+        for entry in self.tableframe.grid_slaves():
+            if int(entry.grid_info()["row"]) == row and int(entry.grid_info()["column"]) > 0:
+                entry.grid_forget()
+
+        ##This shows edited obj on the table
+        editedtext = tk.Label(self.tableframe, text=editobj["text"])
+        editedcategory = tk.Label(self.tableframe, text=editobj["category"])
+
+        editedtext.bind("<Double-Button-1>", self.beginedit)
+        editedcategory.bind("<Double-Button-1>", self.beginedit)
+
+        editedtext.grid(row=row, column=1, sticky=tk.W)
+        editedcategory.grid(row=row, column=2, sticky=tk.W)
+
+    #Remove obj from list, given it's index
+    def removeline(self, n):
+        self.phrasesdb.remove(self.phrasesdb[n])
+
+    def createmenu(self):
+        #Top Menu
+        self.menu = tk.Menu(self.rootwindow)
+        self.rootwindow.config(menu=self.menu)
+
+        self.filesubmenu = tk.Menu(self.menu, tearoff=0)
+        self.menu.add_cascade(label="File", menu=self.filesubmenu)
+        self.filesubmenu.add_command(label="New File", command=self.debug) #Remove debug, put actual function
+        self.filesubmenu.add_separator()
+        self.filesubmenu.add_command(label="Open", command=self.debug) #Remove debug, put actual function
+        self.filesubmenu.add_separator()
+        self.filesubmenu.add_command(label="Save", command=self.savefile)
+        self.filesubmenu.add_command(label="Save As", command=self.debug) #Remove debug, put actual function
+        self.filesubmenu.add_separator()
+        self.filesubmenu.add_command(label="Exit", command=self.exitapp)
+
+        self.helpmenu = tk.Menu(self.menu, tearoff=0)
+        self.menu.add_cascade(label="Help", menu=self.helpmenu)
+        self.helpmenu.add_command(label="Report a Bug", command=self.debug) #Remove debug, put actual function
+        self.helpmenu.add_command(label="Check documentation", command=self.showdocumentation)
+
+
+db = DB()
+broccoli = Broccoli(db)
