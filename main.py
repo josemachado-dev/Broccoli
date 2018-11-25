@@ -1,8 +1,10 @@
 #External libraries
 import tkinter as tk
+import tkinter.filedialog
 import json
 import webbrowser
 
+#Defining the database and its funtions
 class DB:
     def __init__(self):
         self.currentfilename = "autosave.json"
@@ -13,6 +15,7 @@ class DB:
         with open(filename if filename is not None else self.currentfilename, "w") as file:
             json.dump(self.phrases, file, indent=2)
 
+#Defining the app and its funtions
 class Broccoli:
     #This serves merly to test new functions, and see if they're being called when they should
     def debugevent(self, event):
@@ -32,7 +35,7 @@ class Broccoli:
         self.rootwindow = tk.Tk()
         self.rootwindow.title("improved-broccoli")
 
-        self.createmenu()
+        self.assembletopmenu()
 
         #Table showing content
         self.tableframe = tk.Frame(self.rootwindow)
@@ -47,9 +50,9 @@ class Broccoli:
         self.texttitle.grid(row=0, column=1)
         self.categorytitle.grid(row=0, column=2)
 
-            ###############################################
-            # The new objs from the list go in the middle #
-            ###############################################
+        ###############################################
+        # The new objs from the list go in the middle #
+        ###############################################
 
         ##This creates the first input fields
         self.nextindex = tk.Label(self.tableframe, text=(len(self.phrasesdb)))
@@ -62,33 +65,30 @@ class Broccoli:
         self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
         self.addlinebutton.grid(row=(len(self.phrasesdb)+1), column=3)
 
-        #Lower Status Bar
-        ##############################
-        # I have to do it eventually #
-        ##############################
+        self.assemblestatusbar()
 
         #Root Window draw
         self.rootwindow.mainloop()
 
     def savefile(self):
-        self.db.save()
+        #self.db.save()
 
-#        if self.db.savedbefore:
-#            self.db.save()
-#        else:
-#            self.savefileas()
+        if self.db.savedbefore:
+            self.db.save()
+        else:
+            self.savefileas()
 
 
-#   def savefileas(self):
-#       filename = "hello.json" #Do interface
-#       f = tk.filedialog.asksaveasfilename(filetypes=("json", "*.json"))
-#       if f is None: # asksaveasfile return `None` if dialog closed with "cancel".
-#           return
-#       f.close()
-#
-#       self.db.currentfilename = filename
-#       self.db.savedbefore = True
-#       self.db.save(filename)
+    def savefileas(self):
+       filename = "hello.json" #Do interface
+       f = tk.filedialog.asksaveasfilename(filetypes=("json", "*.json"))
+       if f is None: # asksaveasfile return `None` if dialog closed with "cancel".
+           return
+       f.close()
+
+       self.db.currentfilename = filename
+       self.db.savedbefore = True
+       self.db.save(filename)
 
 
     def exitapp(self):
@@ -174,11 +174,7 @@ class Broccoli:
     def removeline(self, n):
         self.phrasesdb.remove(self.phrasesdb[n])
 
-    def createmenu(self):
-        #Top Menu
-        self.menu = tk.Menu(self.rootwindow)
-        self.rootwindow.config(menu=self.menu)
-
+    def createfilemenu(self):
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="File", menu=self.filesubmenu)
         self.filesubmenu.add_command(label="New File", command=self.debug) #Remove debug, put actual function
@@ -186,14 +182,26 @@ class Broccoli:
         self.filesubmenu.add_command(label="Open", command=self.debug) #Remove debug, put actual function
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Save", command=self.savefile)
-        self.filesubmenu.add_command(label="Save As", command=self.debug) #Remove debug, put actual function
+        self.filesubmenu.add_command(label="Save As", command=self.savefileas)
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Exit", command=self.exitapp)
 
+    def createhelpmenu(self):
         self.helpmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="Help", menu=self.helpmenu)
         self.helpmenu.add_command(label="Report a Bug", command=self.debug) #Remove debug, put actual function
         self.helpmenu.add_command(label="Check documentation", command=self.showdocumentation)
+
+    def assembletopmenu(self):
+        self.menu = tk.Menu(self.rootwindow)
+        self.rootwindow.config(menu=self.menu)
+
+        self.createfilemenu()
+        self.createhelpmenu()
+
+    def assemblestatusbar(self):
+        self.status = tk.Label(self.rootwindow, text="DEBUG::STATUS BAR IS WORKING", bd = 1, relief=tk.SUNKEN, anchor=tk.W)
+        self.status.pack(side=tk.BOTTOM, fill=tk.X)
 
 
 db = DB()
