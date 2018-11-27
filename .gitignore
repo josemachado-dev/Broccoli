@@ -3,6 +3,7 @@
 __pycache__/*
 
 #File types
+*.json
 
 #Files
 autosave.json
