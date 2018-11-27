@@ -80,15 +80,13 @@ class Broccoli:
 
 
     def savefileas(self):
-       filename = "hello.json" #Do interface
-       f = tk.filedialog.asksaveasfilename(filetypes=("json", "*.json"))
+       f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")])
        if f is None: # asksaveasfile return `None` if dialog closed with "cancel".
            return
-       f.close()
 
-       self.db.currentfilename = filename
+       self.db.currentfilename = f
        self.db.savedbefore = True
-       self.db.save(filename)
+       self.db.save(f)
 
 
     def exitapp(self):
