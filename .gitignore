@@ -1,9 +1,9 @@
 #Folders
 .vscode/*
 __pycache__/*
+save_files/*
 
 #File types
 *.json
 
 #Files
-autosave.json

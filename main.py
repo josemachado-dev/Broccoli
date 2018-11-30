@@ -15,6 +15,10 @@ class DB:
         with open(filename if filename is not None else self.currentfilename, "w") as file:
             json.dump(self.phrases, file, indent=2)
 
+    def openf(self, filename=None):
+        with open(filename if filename is not None else self.currentfilename, "r") as file:
+            print("")
+
 #Defining the app and its funtions
 class Broccoli:
     #This serves merly to test new functions, and see if they're being called when they should
@@ -70,9 +74,20 @@ class Broccoli:
         #Root Window draw
         self.rootwindow.mainloop()
 
-    def savefile(self):
-        #self.db.save()
+    def newfile(self):
+        self.debug()
 
+    def openfile(self):
+        self.debug()
+        f = tk.filedialog.askopenfilename(filetypes=[("json","*.json")])
+        if f is None:
+            return
+        
+        self.db.currentfilename = f
+        self.db.savedbefore = True
+        self.db.openf(f)
+
+    def savefile(self):
         if self.db.savedbefore:
             self.db.save()
         else:
@@ -81,16 +96,18 @@ class Broccoli:
 
     def savefileas(self):
        f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")])
-       if f is None: # asksaveasfile return `None` if dialog closed with "cancel".
+       if f is None:
            return
 
        self.db.currentfilename = f
        self.db.savedbefore = True
        self.db.save(f)
 
-
     def exitapp(self):
         self.rootwindow.destroy()
+
+    def reportbug(self):
+        self.debug
 
     def showdocumentation(self):
         #url should be updated if documentation changes places, for example, a wiki is created
@@ -175,9 +192,9 @@ class Broccoli:
     def createfilemenu(self):
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="File", menu=self.filesubmenu)
-        self.filesubmenu.add_command(label="New File", command=self.debug) #Remove debug, put actual function
+        self.filesubmenu.add_command(label="New File", command=self.newfile)
         self.filesubmenu.add_separator()
-        self.filesubmenu.add_command(label="Open", command=self.debug) #Remove debug, put actual function
+        self.filesubmenu.add_command(label="Open", command=self.openfile)
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Save", command=self.savefile)
         self.filesubmenu.add_command(label="Save As", command=self.savefileas)
@@ -187,7 +204,7 @@ class Broccoli:
     def createhelpmenu(self):
         self.helpmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="Help", menu=self.helpmenu)
-        self.helpmenu.add_command(label="Report a Bug", command=self.debug) #Remove debug, put actual function
+        self.helpmenu.add_command(label="Report a Bug", command=self.reportbug)
         self.helpmenu.add_command(label="Check documentation", command=self.showdocumentation)
 
     def assembletopmenu(self):
