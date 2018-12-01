@@ -14,10 +14,7 @@ class DB:
     def save(self, filename=None):
         with open(filename if filename is not None else self.currentfilename, "w") as file:
             json.dump(self.phrases, file, indent=2)
-
-    def openf(self, filename=None):
-        with open(filename if filename is not None else self.currentfilename, "r") as file:
-            print("")
+            
 
 #Defining the app and its funtions
 class Broccoli:
@@ -78,14 +75,37 @@ class Broccoli:
         self.debug()
 
     def openfile(self):
-        self.debug()
         f = tk.filedialog.askopenfilename(filetypes=[("json","*.json")])
         if f is None:
             return
         
         self.db.currentfilename = f
         self.db.savedbefore = True
-        self.db.openf(f)
+        #self.db.openf(f)
+        with open(f if f is not None else self.db.currentfilename, "r") as file:
+            data = json.load(file)
+            for thing in data:
+                newobj = {"text": thing["text"], "category": thing["category"]}
+                self.phrasesdb.append(newobj)
+
+                ##This shows new obj on the table
+                index = tk.Label(self.tableframe, text=len(self.phrasesdb))
+                newesttext = tk.Label(self.tableframe, text=newobj["text"])
+                newestcategory = tk.Label(self.tableframe, text=newobj["category"])
+                index.grid(row=len(self.phrasesdb))
+                newesttext.grid(row=len(self.phrasesdb), column=1, sticky=tk.W)
+                newestcategory.grid(row=len(self.phrasesdb), column=2, sticky=tk.W)
+
+                ##This will allow to edit the line
+                newesttext.bind("<Double-Button-1>", self.beginedit)
+                newestcategory.bind("<Double-Button-1>", self.beginedit)
+
+        ##This pushes the input fields to the bottom of the list
+        nextindex = tk.Label(self.tableframe, text=len(self.phrasesdb) + 1)
+        nextindex.grid(row=(len(self.phrasesdb)+1))
+        self.newtext.grid(row=(len(self.phrasesdb)+1), column=1)
+        self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
+        self.addlinebutton.grid(row=(len(self.phrasesdb)+1), column=3)
 
     def savefile(self):
         if self.db.savedbefore:
@@ -123,8 +143,7 @@ class Broccoli:
         newesttext = tk.Label(self.tableframe, text=newobj["text"])
         newestcategory = tk.Label(self.tableframe, text=newobj["category"])
 
-        ##This will allow to edit the line, eventually
-        ### preferebly this would go on a different function
+        ##This will allow to edit the line
         newesttext.bind("<Double-Button-1>", self.beginedit)
         newestcategory.bind("<Double-Button-1>", self.beginedit)
 
@@ -136,7 +155,7 @@ class Broccoli:
         self.newcategory.delete(0, tk.END)
 
         ##This pushes the input fields to the bottom of the list
-        nextindex = tk.Label(self.tableframe, text=(len(self.phrasesdb)))
+        nextindex = tk.Label(self.tableframe, text=len(self.phrasesdb))
         nextindex.grid(row=(len(self.phrasesdb)+1))
         self.newtext.grid(row=(len(self.phrasesdb)+1), column=1)
         self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
