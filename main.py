@@ -3,6 +3,7 @@ import tkinter as tk
 import tkinter.filedialog
 import json
 import webbrowser
+import table as tbl
 
 #Defining the database and its funtions
 class DB:
@@ -19,15 +20,9 @@ class DB:
 #Defining the app and its funtions
 class Broccoli:
     #This serves merly to test new functions, and see if they're being called when they should
-    def debugevent(self, event):
-        print("debug event was called")
-
     def debug(self):
         print("debug was called")
 
-    #Each obj on the list is a full line on the table
-    #Each line is as follows
-    #Index | Text  | Category
     def __init__(self, db):
         self.phrasesdb = db.phrases
         self.db = db
@@ -38,7 +33,31 @@ class Broccoli:
 
         self.assembletopmenu()
 
+        self.oldtable()
+        self.newtable()
+
+        self.assemblestatusbar()
+
+        #Root Window draw
+        self.rootwindow.mainloop()
+
+    def newtable(self):
+        table = tbl.Table(self.rootwindow, ["column A", "column B", "column C"], column_minwidths=[None, None, None])
+        table.pack(padx=10,pady=10)
+
+        table.set_data([[1,2,3],[4,5,6], [7,8,9], [10,11,12], [13,14,15],[15,16,18], [19,20,21]])
+        table.cell(0,0, " a fdas fasd fasdf asdf asdfasdf asdf asdfa sdfas asd sadf ")
+    
+        table.insert_row([22,23,24])
+        table.insert_row([25,26,27])
+    
+        self.rootwindow.update()
+        self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
+
+    def oldtable(self):
         #Table showing content
+        self.scrollbar = tk.Scrollbar(self.rootwindow)
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.tableframe = tk.Frame(self.rootwindow)
         self.tableframe.pack(fill=tk.X)
 
@@ -51,10 +70,6 @@ class Broccoli:
         self.texttitle.grid(row=0, column=1)
         self.categorytitle.grid(row=0, column=2)
 
-        ###############################################
-        # The new objs from the list go in the middle #
-        ###############################################
-
         ##This creates the first input fields
         self.nextindex = tk.Label(self.tableframe, text=(len(self.phrasesdb)))
         self.newtext = tk.Entry(self.tableframe)
@@ -65,11 +80,6 @@ class Broccoli:
         self.newtext.grid(row=(len(self.phrasesdb)+1), column=1)
         self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
         self.addlinebutton.grid(row=(len(self.phrasesdb)+1), column=3)
-
-        self.assemblestatusbar()
-
-        #Root Window draw
-        self.rootwindow.mainloop()
 
     def newfile(self):
         self.debug()
@@ -113,7 +123,6 @@ class Broccoli:
         else:
             self.savefileas()
 
-
     def savefileas(self):
        f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")])
        if f is None:
@@ -143,12 +152,12 @@ class Broccoli:
         newesttext = tk.Label(self.tableframe, text=newobj["text"])
         newestcategory = tk.Label(self.tableframe, text=newobj["category"])
 
+        newesttext.grid(row=len(self.phrasesdb), column=1, sticky=tk.W)
+        newestcategory.grid(row=len(self.phrasesdb), column=2, sticky=tk.W)
+
         ##This will allow to edit the line
         newesttext.bind("<Double-Button-1>", self.beginedit)
         newestcategory.bind("<Double-Button-1>", self.beginedit)
-
-        newesttext.grid(row=len(self.phrasesdb), column=1, sticky=tk.W)
-        newestcategory.grid(row=len(self.phrasesdb), column=2, sticky=tk.W)
 
         ##This clears the input flields
         self.newtext.delete(0, tk.END)
@@ -181,7 +190,7 @@ class Broccoli:
         editcategory.grid(row=row, column=2)
         editlinebutton.grid(row=row, column=3)
 
-    #Commits the edit
+    #Commits the edit of a given line
     def editline(self, event, edittext, editcategory):
         ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
         row = event.widget.grid_info()["row"]
