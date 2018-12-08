@@ -141,7 +141,10 @@ class Broccoli:
         self.rootwindow.destroy()
 
     def reportbug(self):
-        self.debug
+        webbrowser.open("https://github.com/josemachado-dev/improved-broccoli/issues", new=2, autoraise=True)
+    
+    def sendfeedback(self):
+        webbrowser.open("https://github.com/josemachado-dev/improved-broccoli/issues", new=2, autoraise=True)
 
     def showdocumentation(self):
         #url should be updated if documentation changes places, for example, a wiki is created
@@ -210,22 +213,50 @@ class Broccoli:
     def removeline(self, n):
         self.table.delete_row(n)
 
+    def exportfile(self):
+        self.debug()
+
     def createfilemenu(self):
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="File", menu=self.filesubmenu)
+
         self.filesubmenu.add_command(label="New File", command=self.newfile)
+
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Open", command=self.openfile)
+
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Save", command=self.savefile)
         self.filesubmenu.add_command(label="Save As", command=self.savefileas)
+
+        self.filesubmenu.add_separator()
+        self.filesubmenu.add_command(label="Export", command=self.exportfile)
+
+
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Exit", command=self.exitapp)
+    
+    def createeditmenu(self):
+        self.editmenu = tk.Menu(self.menu, tearoff=0)
+        self.menu.add_cascade(label="Edit", menu=self.editmenu)
+
+        self.editmenu.add_command(label="Undo", command=self.debug)
+        self.editmenu.add_command(label="Redo", command=self.debug)
+
+        self.editmenu.add_separator()
+        self.editmenu.add_command(label="Cut", command=self.debug)
+        self.editmenu.add_command(label="Copy", command=self.debug)
+        self.editmenu.add_command(label="Paste", command=self.debug)
+
 
     def createhelpmenu(self):
         self.helpmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="Help", menu=self.helpmenu)
+
         self.helpmenu.add_command(label="Report a Bug", command=self.reportbug)
+        self.helpmenu.add_command(label="Send Feedback", command=self.sendfeedback)
+
+        self.helpmenu.add_separator()
         self.helpmenu.add_command(label="Check documentation", command=self.showdocumentation)
 
     def assembletopmenu(self):
@@ -233,6 +264,7 @@ class Broccoli:
         self.rootwindow.config(menu=self.menu)
 
         self.createfilemenu()
+        self.createeditmenu()
         self.createhelpmenu()
 
     def assemblestatusbar(self):
