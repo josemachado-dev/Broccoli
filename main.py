@@ -50,58 +50,40 @@ class Broccoli:
         self.rootwindow = tk.Tk()
         self.rootwindow.title("improved-broccoli")
 
+        self.tableframe = tk.Frame(self.rootwindow)
+        self.tableframe.pack(fill=tk.X)
+        self.enteryframe = tk.Frame(self.rootwindow)
+        self.enteryframe.pack(fill=tk.X)
+
         self.assembletopmenu()
-
-        self.oldtable()
-        self.newtable()
-
+        self.assembletable()
         self.assemblestatusbar()
 
         #Root Window draw
+        self.rootwindow.update()
         self.rootwindow.mainloop()
 
-    def newtable(self):
-        table = tbl.Table(self.rootwindow, ["column A", "column B", "column C"], column_minwidths=[None, None, None])
-        table.pack(padx=10,pady=10)
+    def assembletable(self):
+        self.table = tbl.Table(self.tableframe, ["index", "text", "category"], column_minwidths=[None, None, None])
+        self.table.pack(padx=10,pady=10)
 
-        table.set_data([[1,2,3],[4,5,6], [7,8,9], [10,11,12], [13,14,15],[15,16,18], [19,20,21]])
-        table.cell(0,0, " a fdas fasd fasdf asdf asdfasdf asdf asdfa sdfas asd sadf ")
-    
-        table.insert_row([22,23,24])
-        table.insert_row([25,26,27])
-    
+        self.enterText = tk.Entry(self.enteryframe)
+        self.enterText.grid(row=1, column=0)
+        self.enterCategory = tk.Entry(self.enteryframe)
+        self.enterCategory.grid(row=1, column=1)
+        self.addlinebutton = tk.Button(self.enteryframe, text=" + ", command=self.addline)
+        self.addlinebutton.grid(row=1, column=2)
+
         self.rootwindow.update()
         self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
 
-    def oldtable(self):
-        #Table showing content
-        self.scrollbar = tk.Scrollbar(self.rootwindow)
-        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.tableframe = tk.Frame(self.rootwindow)
-        self.tableframe.pack(fill=tk.X)
-
-        ##This creates the title of the table
-        self.indextitle = tk.Label(self.tableframe, text="index")
-        self.texttitle = tk.Label(self.tableframe, text="text")
-        self.categorytitle = tk.Label(self.tableframe, text="category")
-
-        self.indextitle.grid(row=0)
-        self.texttitle.grid(row=0, column=1)
-        self.categorytitle.grid(row=0, column=2)
-
-        ##This creates the first input fields
-        self.nextindex = tk.Label(self.tableframe, text=(len(self.phrasesdb)))
-        self.newtext = tk.Entry(self.tableframe)
-        self.newcategory = tk.Entry(self.tableframe)
-        self.addlinebutton = tk.Button(self.tableframe, text=" + ", command=self.addline)
-
-        self.nextindex.grid(row=(len(self.phrasesdb)+1))
-        self.newtext.grid(row=(len(self.phrasesdb)+1), column=1)
-        self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
-        self.addlinebutton.grid(row=(len(self.phrasesdb)+1), column=3)
-
     def newfile(self):
-        self.debug()
+        #for now only clears the table and reset the index counter, but doesn't remove the lines as it should
+        self.table.clear()
+        self.db.currentfilename = "autosave.json"
+        self.db.savedbefore = False
+        self.phrasesdb = []
+        self.rootwindow.update()
 
     def openfile(self):
         f = tk.filedialog.askopenfilename(filetypes=[("json","*.json")])
@@ -110,7 +92,7 @@ class Broccoli:
         
         self.db.currentfilename = f
         self.db.savedbefore = True
-        #self.db.openf(f)
+
         with open(f if f is not None else self.db.currentfilename, "r") as file:
             data = json.load(file)
             for thing in data:
@@ -118,23 +100,27 @@ class Broccoli:
                 self.phrasesdb.append(newobj)
 
                 ##This shows new obj on the table
-                index = tk.Label(self.tableframe, text=len(self.phrasesdb))
-                newesttext = tk.Label(self.tableframe, text=newobj["text"])
-                newestcategory = tk.Label(self.tableframe, text=newobj["category"])
-                index.grid(row=len(self.phrasesdb))
-                newesttext.grid(row=len(self.phrasesdb), column=1, sticky=tk.W)
-                newestcategory.grid(row=len(self.phrasesdb), column=2, sticky=tk.W)
+                self.table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
+
+                self.enterText.delete(0, tk.END)
+                self.enterCategory.delete(0, tk.END)
+
+                self.rootwindow.update()
 
                 ##This will allow to edit the line
-                newesttext.bind("<Double-Button-1>", self.beginedit)
-                newestcategory.bind("<Double-Button-1>", self.beginedit)
+                ##NEEDS REWORK
+                ##newesttext.bind("<Double-Button-1>", self.beginedit)
+                ##newestcategory.bind("<Double-Button-1>", self.beginedit)
 
         ##This pushes the input fields to the bottom of the list
-        nextindex = tk.Label(self.tableframe, text=len(self.phrasesdb) + 1)
-        nextindex.grid(row=(len(self.phrasesdb)+1))
-        self.newtext.grid(row=(len(self.phrasesdb)+1), column=1)
-        self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
-        self.addlinebutton.grid(row=(len(self.phrasesdb)+1), column=3)
+        self.enterText = tk.Entry(self.enteryframe)
+        self.enterText.grid(row=1, column=0)
+        self.enterCategory = tk.Entry(self.enteryframe)
+        self.enterCategory.grid(row=1, column=1)
+        self.addlinebutton = tk.Button(self.enteryframe, text=" + ", command=self.addline)
+        self.addlinebutton.grid(row=1, column=2)
+
+        self.rootwindow.update()
 
     def savefile(self):
         if self.db.savedbefore:
@@ -164,30 +150,20 @@ class Broccoli:
     #Add obj to list
     def addline(self):
         ##This creates new obj with values from the input fields, and inserts it in the list
-        newobj = {"text": self.newtext.get(), "category": self.newcategory.get()}
+        newobj = {"text": self.enterText.get(), "category": self.enterCategory.get()}
         self.phrasesdb.append(newobj)
 
-        ##This shows new obj on the table
-        newesttext = tk.Label(self.tableframe, text=newobj["text"])
-        newestcategory = tk.Label(self.tableframe, text=newobj["category"])
+        self.table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
 
-        newesttext.grid(row=len(self.phrasesdb), column=1, sticky=tk.W)
-        newestcategory.grid(row=len(self.phrasesdb), column=2, sticky=tk.W)
+        self.enterText.delete(0, tk.END)
+        self.enterCategory.delete(0, tk.END)
+
+        self.rootwindow.update()
 
         ##This will allow to edit the line
-        newesttext.bind("<Double-Button-1>", self.beginedit)
-        newestcategory.bind("<Double-Button-1>", self.beginedit)
-
-        ##This clears the input flields
-        self.newtext.delete(0, tk.END)
-        self.newcategory.delete(0, tk.END)
-
-        ##This pushes the input fields to the bottom of the list
-        nextindex = tk.Label(self.tableframe, text=len(self.phrasesdb))
-        nextindex.grid(row=(len(self.phrasesdb)+1))
-        self.newtext.grid(row=(len(self.phrasesdb)+1), column=1)
-        self.newcategory.grid(row=(len(self.phrasesdb)+1), column=2)
-        self.addlinebutton.grid(row=(len(self.phrasesdb)+1), column=3)
+        ##NEEDS REWORK
+        ##newesttext.bind("<Double-Button-1>", self.beginedit)
+        ##newestcategory.bind("<Double-Button-1>", self.beginedit)
 
     #Edit obj in list, given it's index
     def beginedit(self, event):
@@ -215,7 +191,6 @@ class Broccoli:
         row = event.widget.grid_info()["row"]
         index = row - 1
         self.phrasesdb[index].update({"text": edittext.get(), "category": editcategory.get()})
-        editobj = self.phrasesdb[index]
 
         ##This delets the entrys on the row to be edited, to give space for new labels
         for entry in self.tableframe.grid_slaves():
@@ -223,18 +198,17 @@ class Broccoli:
                 entry.grid_forget()
 
         ##This shows edited obj on the table
-        editedtext = tk.Label(self.tableframe, text=editobj["text"])
-        editedcategory = tk.Label(self.tableframe, text=editobj["category"])
-
-        editedtext.bind("<Double-Button-1>", self.beginedit)
-        editedcategory.bind("<Double-Button-1>", self.beginedit)
-
-        editedtext.grid(row=row, column=1, sticky=tk.W)
-        editedcategory.grid(row=row, column=2, sticky=tk.W)
+        self.table.cell(index,0, index)
+        self.table.cell(index,1, edittext.get())
+        self.table.cell(index,2, editcategory.get())
+        
+        #NEEDS REWORK
+        #editedtext.bind("<Double-Button-1>", self.beginedit)
+        #editedcategory.bind("<Double-Button-1>", self.beginedit)
 
     #Remove obj from list, given it's index
     def removeline(self, n):
-        self.phrasesdb.remove(self.phrasesdb[n])
+        self.table.delete_row(n)
 
     def createfilemenu(self):
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
