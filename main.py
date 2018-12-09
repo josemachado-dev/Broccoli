@@ -78,8 +78,7 @@ class Broccoli:
         self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
 
     def newfile(self):
-        #for now only clears the table and reset the index counter, but doesn't remove the lines as it should
-        self.table.clear()
+        self.table._pop_n_rows(len(self.phrasesdb))
         self.db.currentfilename = "autosave.json"
         self.db.savedbefore = False
         self.phrasesdb = []
