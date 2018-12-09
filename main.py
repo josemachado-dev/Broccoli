@@ -53,7 +53,7 @@ class Broccoli:
     def __init__(self, db):
         self.phrasesdb = db.phrases
         self.db = db
-        self.db.currentfilename = "Untitled-1"
+        self.db.currentfilename = "Untitled-1.json"
 
         #Definition of root window
         self.rootwindow = tk.Tk()
@@ -91,7 +91,7 @@ class Broccoli:
         self.table._pop_n_rows(len(self.phrasesdb))
 
         self.updatestatusbar("Creating new file")
-        self.db.currentfilename = "autosave.json"
+        self.db.currentfilename = "Untitled-1.json"
         self.db.savedbefore = False
         self.phrasesdb = []
 
@@ -156,9 +156,7 @@ class Broccoli:
     def savefileas(self):
         self.updatestatusbar("Saving file...")
 
-        f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")])
-        if not f.lower().endswith(".json"):
-            f = f + ".json"
+        f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")], defaultextension=".json", initialfile=self.db.currentfilename)
 
         self.updatestatusbar("Saving file to " + f)
 
@@ -255,9 +253,7 @@ class Broccoli:
 
     def exportfile(self):
         self.updatestatusbar("Exporting file...")
-        f = tk.filedialog.asksaveasfilename(filetypes=[("csv", "*.csv")])
-        if not f.lower().endswith(".csv"):
-            f = f + ".csv"
+        f = tk.filedialog.asksaveasfilename(filetypes=[("csv", "*.csv")], defaultextension=".csv", initialfile=self.db.currentfilename)
 
         self.updatestatusbar("Exporting file to " + f)
 
@@ -298,7 +294,6 @@ class Broccoli:
         self.editmenu.add_command(label="Cut", command=self.debug)
         self.editmenu.add_command(label="Copy", command=self.debug)
         self.editmenu.add_command(label="Paste", command=self.debug)
-
 
     def createhelpmenu(self):
         self.helpmenu = tk.Menu(self.menu, tearoff=0)
