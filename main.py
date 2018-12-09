@@ -21,6 +21,7 @@
 import tkinter as tk
 import tkinter.filedialog
 import json
+import csv
 import webbrowser
 import table as tbl
 
@@ -34,7 +35,21 @@ class DB:
     def save(self, filename=None):
         with open(filename if filename is not None else self.currentfilename, "w") as file:
             json.dump(self.phrases, file, indent=2)
-            
+    
+    def export(self, phrasesdb, filename):
+        if(len(phrasesdb) > 0):
+            with open(filename, "w") as file:
+                print(phrasesdb)
+                fieldnames = ['text', 'category']
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                writer.writeheader()
+                for i in range(0, len(phrasesdb)):
+                    writer.writerow(phrasesdb[i])
+        else:
+            with open(filename, "w") as file:
+                fieldnames = ['text', 'category']
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                writer.writeheader()
 
 #Defining the app and its funtions
 class Broccoli:
@@ -129,6 +144,8 @@ class Broccoli:
 
     def savefileas(self):
        f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")])
+       if not f.lower().endswith(".json"):
+            f = f + ".json"
        if f is None:
            return
 
@@ -213,7 +230,13 @@ class Broccoli:
         self.table.delete_row(n)
 
     def exportfile(self):
-        self.debug()
+        f = tk.filedialog.asksaveasfilename(filetypes=[("csv", "*.csv")])
+        if not f.lower().endswith(".csv"):
+            f = f + ".csv"
+        if f is None:
+           return
+
+        self.db.export(self.phrasesdb, f)
 
     def createfilemenu(self):
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
