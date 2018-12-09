@@ -37,19 +37,12 @@ class DB:
             json.dump(self.phrases, file, indent=2)
     
     def export(self, phrasesdb, filename):
-        if(len(phrasesdb) > 0):
-            with open(filename, "w") as file:
-                print(phrasesdb)
-                fieldnames = ['text', 'category']
-                writer = csv.DictWriter(file, fieldnames=fieldnames)
-                writer.writeheader()
-                for i in range(0, len(phrasesdb)):
-                    writer.writerow(phrasesdb[i])
-        else:
-            with open(filename, "w") as file:
-                fieldnames = ['text', 'category']
-                writer = csv.DictWriter(file, fieldnames=fieldnames)
-                writer.writeheader()
+        with open(filename, "w") as file:
+            fieldnames = ['text', 'category']
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            for key, item in phrasesdb.items():
+                writer.writerow(key)
 
 #Defining the app and its funtions
 class Broccoli:
@@ -60,10 +53,11 @@ class Broccoli:
     def __init__(self, db):
         self.phrasesdb = db.phrases
         self.db = db
+        self.db.currentfilename = "Untitled-1"
 
         #Definition of root window
         self.rootwindow = tk.Tk()
-        self.rootwindow.title("improved-broccoli")
+        self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
 
         self.tableframe = tk.Frame(self.rootwindow)
         self.tableframe.pack(fill=tk.X)
@@ -93,19 +87,31 @@ class Broccoli:
         self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
 
     def newfile(self):
+        self.updatestatusbar("Cleaning table")
         self.table._pop_n_rows(len(self.phrasesdb))
+
+        self.updatestatusbar("Creating new file")
         self.db.currentfilename = "autosave.json"
         self.db.savedbefore = False
         self.phrasesdb = []
+
+        self.updatestatusbar("")
+        self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.rootwindow.update()
 
     def openfile(self):
+        self.updatestatusbar("Opening file...")
         f = tk.filedialog.askopenfilename(filetypes=[("json","*.json")])
         if f is None:
             return
         
+        self.updatestatusbar("Opening file at " + f)
         self.db.currentfilename = f
         self.db.savedbefore = True
+
+        self.updatestatusbar("")
+        self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
+        self.rootwindow.update()
 
         with open(f if f is not None else self.db.currentfilename, "r") as file:
             data = json.load(file)
@@ -138,36 +144,51 @@ class Broccoli:
 
     def savefile(self):
         if self.db.savedbefore:
+            self.updatestatusbar("Saving file to " + self.db.currentfilename)
             self.db.save()
+
+            self.updatestatusbar("")
+            self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
+            self.rootwindow.update()
         else:
             self.savefileas()
 
     def savefileas(self):
-       f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")])
-       if not f.lower().endswith(".json"):
+        self.updatestatusbar("Saving file...")
+
+        f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")])
+        if not f.lower().endswith(".json"):
             f = f + ".json"
-       if f is None:
+
+        self.updatestatusbar("Saving file to " + f)
+
+        if f is None:
            return
 
-       self.db.currentfilename = f
-       self.db.savedbefore = True
-       self.db.save(f)
+        self.db.currentfilename = f
+        self.db.savedbefore = True
+        self.db.save(f)
+
+        self.updatestatusbar("")
+        self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
+        self.rootwindow.update()
 
     def exitapp(self):
         self.rootwindow.destroy()
 
     def reportbug(self):
-        webbrowser.open("https://github.com/josemachado-dev/improved-broccoli/issues", new=2, autoraise=True)
+        webbrowser.open("https://github.com/josemachado-dev/improved-broccoli/issues/new/choose", new=2, autoraise=True)
     
     def sendfeedback(self):
-        webbrowser.open("https://github.com/josemachado-dev/improved-broccoli/issues", new=2, autoraise=True)
+        webbrowser.open("https://github.com/josemachado-dev/improved-broccoli/issues/new/choose", new=2, autoraise=True)
 
     def showdocumentation(self):
         #url should be updated if documentation changes places, for example, a wiki is created
         webbrowser.open("https://github.com/josemachado-dev/improved-broccoli", new=2, autoraise=True)
 
-    #Add obj to list
     def addline(self):
+        #Add obj to list
+
         ##This creates new obj with values from the input fields, and inserts it in the list
         newobj = {"text": self.enterText.get(), "category": self.enterCategory.get()}
         self.phrasesdb.append(newobj)
@@ -184,8 +205,9 @@ class Broccoli:
         ##newesttext.bind("<Double-Button-1>", self.beginedit)
         ##newestcategory.bind("<Double-Button-1>", self.beginedit)
 
-    #Edit obj in list, given it's index
     def beginedit(self, event):
+        #Edit obj in list, given it's index
+
         ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
         row = event.widget.grid_info()["row"]
 
@@ -204,8 +226,9 @@ class Broccoli:
         editcategory.grid(row=row, column=2)
         editlinebutton.grid(row=row, column=3)
 
-    #Commits the edit of a given line
     def editline(self, event, edittext, editcategory):
+        #Commits the edit of a given line
+
         ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
         row = event.widget.grid_info()["row"]
         index = row - 1
@@ -225,18 +248,25 @@ class Broccoli:
         #editedtext.bind("<Double-Button-1>", self.beginedit)
         #editedcategory.bind("<Double-Button-1>", self.beginedit)
 
-    #Remove obj from list, given it's index
     def removeline(self, n):
+        #Remove obj from list, given it's index
+
         self.table.delete_row(n)
 
     def exportfile(self):
+        self.updatestatusbar("Exporting file...")
         f = tk.filedialog.asksaveasfilename(filetypes=[("csv", "*.csv")])
         if not f.lower().endswith(".csv"):
             f = f + ".csv"
+
+        self.updatestatusbar("Exporting file to " + f)
+
         if f is None:
            return
 
         self.db.export(self.phrasesdb, f)
+
+        self.updatestatusbar("")
 
     def createfilemenu(self):
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
@@ -253,7 +283,6 @@ class Broccoli:
 
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Export", command=self.exportfile)
-
 
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Exit", command=self.exitapp)
@@ -276,7 +305,7 @@ class Broccoli:
         self.menu.add_cascade(label="Help", menu=self.helpmenu)
 
         self.helpmenu.add_command(label="Report a Bug", command=self.reportbug)
-        self.helpmenu.add_command(label="Send Feedback", command=self.sendfeedback)
+        self.helpmenu.add_command(label="Request a Feature", command=self.sendfeedback)
 
         self.helpmenu.add_separator()
         self.helpmenu.add_command(label="Check documentation", command=self.showdocumentation)
@@ -290,9 +319,12 @@ class Broccoli:
         self.createhelpmenu()
 
     def assemblestatusbar(self):
-        self.status = tk.Label(self.rootwindow, text="DEBUG::STATUS BAR IS WORKING", bd = 1, relief=tk.SUNKEN, anchor=tk.W)
+        self.status = tk.Label(self.rootwindow, text="", bd = 1, relief=tk.SUNKEN, anchor=tk.W)
         self.status.pack(side=tk.BOTTOM, fill=tk.X)
-
+    
+    def updatestatusbar(self, text):
+        self.status.config(text=text)
+        self.rootwindow.update()
 
 db = DB()
 broccoli = Broccoli(db)
