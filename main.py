@@ -83,10 +83,11 @@ class Broccoli:
 
     def createinputs(self):
         self.enterText = tk.Entry(self.enteryframe)
+        self.enterText.bind("<Return>", lambda event: self.enterCategory.focus_set())
         self.enterText.grid(row=1, column=0)
         self.enterCategory = tk.Entry(self.enteryframe)
         self.enterCategory.grid(row=1, column=1)
-        self.enterCategory.bind("<Return>", (lambda event: self.addline()))
+        self.enterCategory.bind("<Return>", lambda event: self.addline())
 
     def newfile(self):
         self.updatestatusbar("Cleaning table")
@@ -197,6 +198,8 @@ class Broccoli:
 
         self.enterText.delete(0, tk.END)
         self.enterCategory.delete(0, tk.END)
+
+        self.enterText.focus_set()
 
         self.rootwindow.update()
 
