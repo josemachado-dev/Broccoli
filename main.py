@@ -76,15 +76,17 @@ class Broccoli:
         self.table = tbl.Table(self.tableframe, ["index", "text", "category"], column_minwidths=[None, None, None])
         self.table.pack(padx=10,pady=10)
 
+        self.createinputs()
+
+        self.rootwindow.update()
+        self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
+
+    def createinputs(self):
         self.enterText = tk.Entry(self.enteryframe)
         self.enterText.grid(row=1, column=0)
         self.enterCategory = tk.Entry(self.enteryframe)
         self.enterCategory.grid(row=1, column=1)
-        self.addlinebutton = tk.Button(self.enteryframe, text=" + ", command=self.addline)
-        self.addlinebutton.grid(row=1, column=2)
-
-        self.rootwindow.update()
-        self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
+        self.enterCategory.bind("<Return>", (lambda event: self.addline()))
 
     def newfile(self):
         self.updatestatusbar("Cleaning table")
