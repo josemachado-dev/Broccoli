@@ -58,11 +58,7 @@ class Broccoli:
         #Definition of root window
         self.rootwindow = tk.Tk()
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
-
-        self.tableframe = tk.Frame(self.rootwindow)
-        self.tableframe.pack(fill=tk.X)
-        self.enteryframe = tk.Frame(self.rootwindow)
-        self.enteryframe.pack(fill=tk.X)
+        self.rootwindow.state("zoomed")
 
         self.assembletopmenu()
         self.assembletable()
@@ -73,6 +69,9 @@ class Broccoli:
         self.rootwindow.mainloop()
 
     def assembletable(self):
+        self.tableframe = tk.Frame(self.rootwindow)
+        self.tableframe.pack(fill=tk.X)
+
         self.table = tbl.Table(self.tableframe, ["index", "text", "category"], column_minwidths=[None, None, None])
         self.table.pack(padx=10,pady=10)
 
@@ -82,6 +81,8 @@ class Broccoli:
         self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
 
     def createinputs(self):
+        self.enteryframe = tk.Frame(self.rootwindow)
+        self.enteryframe.pack(fill=tk.X)
         self.enterText = tk.Entry(self.enteryframe)
         self.enterText.bind("<Return>", lambda event: self.enterCategory.focus_set())
         self.enterText.grid(row=1, column=0)
