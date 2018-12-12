@@ -23,7 +23,10 @@ import tkinter.filedialog
 import json
 import csv
 import webbrowser
+
+#Internal libraries
 import table as tbl
+import spellchecker
 
 #Defining the database and its funtions
 class DB:
@@ -46,8 +49,8 @@ class DB:
 
 #Defining the app and its funtions
 class Broccoli:
-    #This serves merly to test new functions, and see if they're being called when they should
     def debug(self):
+        #This serves merly to test new functions, and see if they're being called when they should
         print("debug was called")
 
     def __init__(self, db):
