@@ -76,6 +76,7 @@ class Broccoli:
         self.tableframe.pack(fill=tk.X)
 
         self.table = tbl.Table(self.tableframe, ["index", "text", "category"], column_minwidths=[None, None, None])
+        self.columns = 3
         self.table.pack(padx=10,pady=10)
 
         self.createinputs()
@@ -97,29 +98,35 @@ class Broccoli:
         self.enterCategory.bind("<Return>", lambda event: self.addline())
 
     def newfile(self):
-        self.updatestatusbar("Cleaning table")
+        self.updatestatusprocess("Cleaning table")
         self.table._pop_n_rows(len(self.phrasesdb))
 
-        self.updatestatusbar("Creating new file")
+        self.updatestatusprocess("Creating new file")
         self.db.currentfilename = "Untitled-1.json"
         self.db.savedbefore = False
         self.phrasesdb = []
 
-        self.updatestatusbar("")
+        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
+        self.updatestatusprocess("")
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.rootwindow.update()
 
     def openfile(self):
-        self.updatestatusbar("Opening file...")
+        self.updatestatusprocess("Opening file...")
         f = tk.filedialog.askopenfilename(filetypes=[("json","*.json")])
         if f is None:
+            self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
             return
-        
-        self.updatestatusbar("Opening file at " + f)
+
+        self.updatestatusprocess("Cleaning table")
+        self.table._pop_n_rows(len(self.phrasesdb))
+        self.phrasesdb = []
+
+        self.updatestatusprocess("Opening file at " + f)
         self.db.currentfilename = f
         self.db.savedbefore = True
 
-        self.updatestatusbar("")
+        self.updatestatusprocess("")
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.rootwindow.update()
 
@@ -142,33 +149,26 @@ class Broccoli:
                 ##newesttext.bind("<Double-Button-1>", self.beginedit)
                 ##newestcategory.bind("<Double-Button-1>", self.beginedit)
 
-        ##This pushes the input fields to the bottom of the list
-        self.enterText = tk.Entry(self.enteryframe)
-        self.enterText.grid(row=1, column=0)
-        self.enterCategory = tk.Entry(self.enteryframe)
-        self.enterCategory.grid(row=1, column=1)
-        self.addlinebutton = tk.Button(self.enteryframe, text=" + ", command=self.addline)
-        self.addlinebutton.grid(row=1, column=2)
-
+        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
         self.rootwindow.update()
 
     def savefile(self):
         if self.db.savedbefore:
-            self.updatestatusbar("Saving file to " + self.db.currentfilename)
+            self.updatestatusprocess("Saving file to " + self.db.currentfilename)
             self.db.save()
 
-            self.updatestatusbar("")
+            self.updatestatusprocess("")
             self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
             self.rootwindow.update()
         else:
             self.savefileas()
 
     def savefileas(self):
-        self.updatestatusbar("Saving file...")
+        self.updatestatusprocess("Saving file...")
 
         f = tk.filedialog.asksaveasfilename(filetypes=[("json", "*.json")], defaultextension=".json", initialfile=self.db.currentfilename)
 
-        self.updatestatusbar("Saving file to " + f)
+        self.updatestatusprocess("Saving file to " + f)
 
         if f is None:
            return
@@ -177,7 +177,7 @@ class Broccoli:
         self.db.savedbefore = True
         self.db.save(f)
 
-        self.updatestatusbar("")
+        self.updatestatusprocess("")
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.rootwindow.update()
 
@@ -206,8 +206,9 @@ class Broccoli:
         self.enterText.delete(0, tk.END)
         self.enterCategory.delete(0, tk.END)
 
-        self.enterText.focus_set()
+        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
 
+        self.enterText.focus_set()
         self.rootwindow.update()
 
         ##This will allow to edit the line
@@ -262,19 +263,20 @@ class Broccoli:
         #Remove obj from list, given it's index
 
         self.table.delete_row(n)
+        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
 
     def exportfile(self):
-        self.updatestatusbar("Exporting file...")
+        self.updatestatusprocess("Exporting file...")
         f = tk.filedialog.asksaveasfilename(filetypes=[("csv", "*.csv")], defaultextension=".csv", initialfile=self.db.currentfilename)
 
-        self.updatestatusbar("Exporting file to " + f)
+        self.updatestatusprocess("Exporting file to " + f)
 
         if f is None:
            return
 
         self.db.export(self.phrasesdb, f)
 
-        self.updatestatusbar("")
+        self.updatestatusprocess("")
 
     def createfilemenu(self):
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
@@ -326,11 +328,21 @@ class Broccoli:
         self.createhelpmenu()
 
     def assemblestatusbar(self):
-        self.status = tk.Label(self.rootwindow, text="", bd = 1, relief=tk.SUNKEN, anchor=tk.W)
-        self.status.pack(side=tk.BOTTOM, fill=tk.X)
+        self.statusframe = tk.Frame(self.rootwindow, bd = 1, relief=tk.SUNKEN)
+        self.statusframe.pack(side=tk.BOTTOM, fill=tk.X)
+
+        self.statusprocess = tk.Label(self.statusframe, text="", anchor=tk.W)
+        self.statusprocess.pack(side=tk.RIGHT)
+
+        self.statusmetrics = tk.Label(self.statusframe, text="Rows: 0 | Columns: 3", anchor=tk.W)
+        self.statusmetrics.pack(side=tk.LEFT)
     
-    def updatestatusbar(self, text):
-        self.status.config(text=text)
+    def updatestatusprocess(self, text):
+        self.statusprocess.config(text=text)
+        self.rootwindow.update()
+
+    def updatestatusmetrics(self, text):
+        self.statusmetrics.config(text=text)
         self.rootwindow.update()
 
 db = DB()
