@@ -67,9 +67,20 @@ class Broccoli:
         self.assembletable()
         self.assemblestatusbar()
 
+        self.keybinds()
+
         #Root Window draw
         self.rootwindow.update()
         self.rootwindow.mainloop()
+    
+    def keybinds(self):
+        self.enterText.bind("<Return>", lambda event: self.enterCategory.focus_set())
+        self.enterCategory.bind("<Return>", lambda event: self.addline())
+
+        self.rootwindow.bind("<Control-n>", lambda event: self.newfile())
+        self.rootwindow.bind("<Control-s>", lambda event: self.savefile())
+        self.rootwindow.bind("<Control-o>", lambda event: self.openfile())
+
 
     def assembletable(self):
         self.tableframe = tk.Frame(self.rootwindow)
@@ -91,11 +102,9 @@ class Broccoli:
         self.newindex = tk.Label(self.enteryframe, text="# index (doesn't auto update yet)")
         self.newindex.grid(row=1, column=0)
         self.enterText = tk.Entry(self.enteryframe)
-        self.enterText.bind("<Return>", lambda event: self.enterCategory.focus_set())
         self.enterText.grid(row=1, column=1)
         self.enterCategory = tk.Entry(self.enteryframe)
         self.enterCategory.grid(row=1, column=2)
-        self.enterCategory.bind("<Return>", lambda event: self.addline())
 
     def newfile(self):
         self.updatestatusprocess("Cleaning table")
