@@ -123,7 +123,7 @@ class Broccoli:
     def openfile(self):
         self.updatestatusprocess("Opening file...")
         f = tk.filedialog.askopenfilename(filetypes=[("json","*.json")])
-        if f is None:
+        if f == '':
             self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
             return
 
@@ -179,7 +179,7 @@ class Broccoli:
 
         self.updatestatusprocess("Saving file to " + f)
 
-        if f is None:
+        if f == '':
            return
 
         self.db.currentfilename = f
@@ -280,7 +280,7 @@ class Broccoli:
 
         self.updatestatusprocess("Exporting file to " + f)
 
-        if f is None:
+        if f == '':
            return
 
         self.db.export(self.phrasesdb, f)
