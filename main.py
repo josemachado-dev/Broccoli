@@ -77,10 +77,20 @@ class Broccoli:
         self.enterText.bind("<Return>", lambda event: self.enterCategory.focus_set())
         self.enterCategory.bind("<Return>", lambda event: self.addline())
 
+        #File Menu Shortcuts
         self.rootwindow.bind("<Control-n>", lambda event: self.newfile())
         self.rootwindow.bind("<Control-s>", lambda event: self.savefile())
+        self.rootwindow.bind("<Control-S>", lambda event: self.debug())
         self.rootwindow.bind("<Control-o>", lambda event: self.openfile())
 
+        #Edit Menu Shortcuts
+        self.rootwindow.bind("<Control-z>", lambda event: self.debug()) #Will serve as "undo"
+        self.rootwindow.bind("<Control-y>", lambda event: self.debug()) #Will serve as "redo"
+
+        #Help Menu Shortcuts
+        self.rootwindow.bind("<F1>", lambda event: self.showdocumentation())
+
+        #Assorted Shortcuts
 
     def assembletable(self):
         self.tableframe = tk.Frame(self.rootwindow)
@@ -291,14 +301,14 @@ class Broccoli:
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="File", menu=self.filesubmenu)
 
-        self.filesubmenu.add_command(label="New File", command=self.newfile)
+        self.filesubmenu.add_command(label="New File    Ctrl+n", command=self.newfile)
 
         self.filesubmenu.add_separator()
-        self.filesubmenu.add_command(label="Open", command=self.openfile)
+        self.filesubmenu.add_command(label="Open    Ctrl+o", command=self.openfile)
 
         self.filesubmenu.add_separator()
-        self.filesubmenu.add_command(label="Save", command=self.savefile)
-        self.filesubmenu.add_command(label="Save As", command=self.savefileas)
+        self.filesubmenu.add_command(label="Save    Ctrl+s", command=self.savefile)
+        self.filesubmenu.add_command(label="Save As    Ctrl+Shift+s", command=self.savefileas)
 
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Export", command=self.exportfile)
@@ -310,8 +320,8 @@ class Broccoli:
         self.editmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="Edit", menu=self.editmenu)
 
-        self.editmenu.add_command(label="Undo", command=self.debug)
-        self.editmenu.add_command(label="Redo", command=self.debug)
+        self.editmenu.add_command(label="Undo    Ctrl+z", command=self.debug)
+        self.editmenu.add_command(label="Redo    Ctrl+y", command=self.debug)
 
         self.editmenu.add_separator()
         self.editmenu.add_command(label="Cut", command=self.debug)
@@ -326,7 +336,7 @@ class Broccoli:
         self.helpmenu.add_command(label="Request a Feature", command=self.sendfeedback)
 
         self.helpmenu.add_separator()
-        self.helpmenu.add_command(label="Check documentation", command=self.showdocumentation)
+        self.helpmenu.add_command(label="Check documentation    F1", command=self.showdocumentation)
 
     def assembletopmenu(self):
         self.menu = tk.Menu(self.rootwindow)
