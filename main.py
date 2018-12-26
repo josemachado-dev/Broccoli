@@ -74,14 +74,12 @@ class Broccoli:
         self.rootwindow.mainloop()
     
     def keybinds(self):
-        self.enterText.bind("<Return>", lambda event: self.enterCategory.focus_set())
-        self.enterCategory.bind("<Return>", lambda event: self.addline())
-
         #File Menu Shortcuts
         self.rootwindow.bind("<Control-n>", lambda event: self.newfile())
         self.rootwindow.bind("<Control-s>", lambda event: self.savefile())
         self.rootwindow.bind("<Control-S>", lambda event: self.debug())
         self.rootwindow.bind("<Control-o>", lambda event: self.openfile())
+        self.rootwindow.bind("<Control-e>", lambda event: self.exportfile())
 
         #Edit Menu Shortcuts
         self.rootwindow.bind("<Control-z>", lambda event: self.debug()) #Will serve as "undo"
@@ -91,6 +89,12 @@ class Broccoli:
         self.rootwindow.bind("<F1>", lambda event: self.showdocumentation())
 
         #Assorted Shortcuts
+        self.enterText.bind("<Return>", lambda event: self.entercategory.focus_set())
+        self.entercategory.bind("<Return>", lambda event: self.addline())
+
+        self.indexedit.bind("<Return>", lambda event: self.edittext.focus_set())
+        self.edittext.bind("<Return>", lambda event: self.editcategory.focus_set())
+        self.editcategory.bind("<Return>", lambda event: self.editline())
 
     def assembletable(self):
         self.tableframe = tk.Frame(self.rootwindow)
@@ -109,12 +113,31 @@ class Broccoli:
         self.enteryframe = tk.Frame(self.rootwindow)
         self.enteryframe.pack(fill=tk.X)
 
-        self.newindex = tk.Label(self.enteryframe, text="# index (doesn't auto update yet)")
+        self.newindex = tk.Label(self.enteryframe, text="#") #index (doesn't auto update yet)
         self.newindex.grid(row=1, column=0)
         self.enterText = tk.Entry(self.enteryframe)
         self.enterText.grid(row=1, column=1)
-        self.enterCategory = tk.Entry(self.enteryframe)
-        self.enterCategory.grid(row=1, column=2)
+        self.entercategory = tk.Entry(self.enteryframe)
+        self.entercategory.grid(row=1, column=2)
+
+        self.breakindex = tk.Label(self.enteryframe, text="-----------")
+        self.breakindex.grid(row=2, column=0)
+        self.breakindex = tk.Label(self.enteryframe, text="VV Edit line in table VV")
+        self.breakindex.grid(row=3, column=0)
+
+        self.indexedittitle = tk.Label(self.enteryframe, text="index")
+        self.indexedittitle.grid(row=4, column=0)
+        self.edittexttitle = tk.Label(self.enteryframe, text="text")
+        self.edittexttitle.grid(row=4, column=1)
+        self.editcategorytitle = tk.Label(self.enteryframe, text="category")
+        self.editcategorytitle.grid(row=4, column=2)
+
+        self.indexedit = tk.Entry(self.enteryframe)
+        self.indexedit.grid(row=5, column=0)
+        self.edittext = tk.Entry(self.enteryframe)
+        self.edittext.grid(row=5, column=1)
+        self.editcategory = tk.Entry(self.enteryframe)
+        self.editcategory.grid(row=5, column=2)
 
     def newfile(self):
         self.updatestatusprocess("Cleaning table")
@@ -159,7 +182,7 @@ class Broccoli:
                 self.table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
 
                 self.enterText.delete(0, tk.END)
-                self.enterCategory.delete(0, tk.END)
+                self.entercategory.delete(0, tk.END)
 
                 self.rootwindow.update()
 
@@ -217,13 +240,13 @@ class Broccoli:
         #Add obj to list
 
         ##This creates new obj with values from the input fields, and inserts it in the list
-        newobj = {"text": self.enterText.get(), "category": self.enterCategory.get()}
+        newobj = {"text": self.enterText.get(), "category": self.entercategory.get()}
         self.phrasesdb.append(newobj)
 
         self.table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
 
         self.enterText.delete(0, tk.END)
-        self.enterCategory.delete(0, tk.END)
+        self.entercategory.delete(0, tk.END)
 
         self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
 
@@ -235,45 +258,16 @@ class Broccoli:
         ##newesttext.bind("<Double-Button-1>", self.beginedit)
         ##newestcategory.bind("<Double-Button-1>", self.beginedit)
 
-    def beginedit(self, event):
-        #Edit obj in list, given it's index
-
-        ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
-        row = event.widget.grid_info()["row"]
-
-        ##This delets the labels on the row to be edited, to give space for input fields, but keeps the index shown
-        for label in self.tableframe.grid_slaves():
-            if int(label.grid_info()["row"]) == row and int(label.grid_info()["column"]) > 0:
-                label.grid_forget()
-
-        ##This creates the entrys for the new inputs
-        edittext = tk.Entry(self.tableframe)
-        editcategory = tk.Entry(self.tableframe)
-        editlinebutton = tk.Button(self.tableframe, text="edit")
-        editlinebutton.bind("<Button-1>", lambda event: self.editline(event, edittext, editcategory))
-
-        edittext.grid(row=row, column=1)
-        editcategory.grid(row=row, column=2)
-        editlinebutton.grid(row=row, column=3)
-
-    def editline(self, event, edittext, editcategory):
+    def editline(self):
         #Commits the edit of a given line
 
-        ##Since the first row (row[0]) is the title row, the index of the obj is one less than the row it's shown in
-        row = event.widget.grid_info()["row"]
-        index = row - 1
-        self.phrasesdb[index].update({"text": edittext.get(), "category": editcategory.get()})
+        self.index = int(self.indexedit.get())
+        if(self.edittext != ""):
+            self.table.cell(self.index, 1, self.edittext.get())
 
-        ##This delets the entrys on the row to be edited, to give space for new labels
-        for entry in self.tableframe.grid_slaves():
-            if int(entry.grid_info()["row"]) == row and int(entry.grid_info()["column"]) > 0:
-                entry.grid_forget()
+        if(self.editcategory != ""):
+            self.table.cell(self.index, 2, self.editcategory.get())
 
-        ##This shows edited obj on the table
-        self.table.cell(index,0, index)
-        self.table.cell(index,1, edittext.get())
-        self.table.cell(index,2, editcategory.get())
-        
         #NEEDS REWORK
         #editedtext.bind("<Double-Button-1>", self.beginedit)
         #editedcategory.bind("<Double-Button-1>", self.beginedit)
@@ -311,7 +305,7 @@ class Broccoli:
         self.filesubmenu.add_command(label="Save As    Ctrl+Shift+s", command=self.savefileas)
 
         self.filesubmenu.add_separator()
-        self.filesubmenu.add_command(label="Export", command=self.exportfile)
+        self.filesubmenu.add_command(label="Export    Ctrl+e", command=self.exportfile)
 
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Exit", command=self.exitapp)
