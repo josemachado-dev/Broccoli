@@ -44,7 +44,7 @@ class DB:
             fieldnames = ['text', 'category']
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             writer.writeheader()
-            for key, item in phrasesdb.items():
+            for key in phrasesdb.items():
                 writer.writerow(key)
 
 #Defining the app and its funtions
@@ -82,8 +82,8 @@ class Broccoli:
         self.rootwindow.bind("<Control-e>", lambda event: self.exportfile())
 
         #Edit Menu Shortcuts
-        self.rootwindow.bind("<Control-z>", lambda event: self.debug()) #Will serve as "undo"
-        self.rootwindow.bind("<Control-y>", lambda event: self.debug()) #Will serve as "redo"
+        #self.rootwindow.bind("<Control-z>", lambda event: self.debug()) #Will serve as "undo"
+        #self.rootwindow.bind("<Control-y>", lambda event: self.debug()) #Will serve as "redo"
 
         #Help Menu Shortcuts
         self.rootwindow.bind("<F1>", lambda event: self.showdocumentation())
@@ -253,24 +253,15 @@ class Broccoli:
         self.enterText.focus_set()
         self.rootwindow.update()
 
-        ##This will allow to edit the line
-        ##NEEDS REWORK
-        ##newesttext.bind("<Double-Button-1>", self.beginedit)
-        ##newestcategory.bind("<Double-Button-1>", self.beginedit)
-
     def editline(self):
         #Commits the edit of a given line
-
         self.index = int(self.indexedit.get())
+
         if(self.edittext != ""):
             self.table.cell(self.index, 1, self.edittext.get())
 
         if(self.editcategory != ""):
             self.table.cell(self.index, 2, self.editcategory.get())
-
-        #NEEDS REWORK
-        #editedtext.bind("<Double-Button-1>", self.beginedit)
-        #editedcategory.bind("<Double-Button-1>", self.beginedit)
 
     def removeline(self, n):
         #Remove obj from list, given it's index
@@ -337,7 +328,7 @@ class Broccoli:
         self.rootwindow.config(menu=self.menu)
 
         self.createfilemenu()
-        self.createeditmenu()
+        #self.createeditmenu()
         self.createhelpmenu()
 
     def assemblestatusbar(self):

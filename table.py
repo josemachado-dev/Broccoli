@@ -1,7 +1,7 @@
 # Author: Miguel Martinez Lopez
 # Version: 0.20
 
-from tkinter import Frame, Label, Message, StringVar, Canvas
+from tkinter import Frame, Label, Message, StringVar, Canvas, Entry
 from tkinter.ttk import Scrollbar
 from tkinter.constants import *
 
@@ -229,6 +229,26 @@ class Header_Cell(Cell):
         width = self._header_label.winfo_reqwidth() + 2*pady
 
         self.configure(height=height, width=width)
+
+class Bottom_Cell(Cell):
+    #Added by José Machado
+    def __init__(self, master, text, bordercolor=None, borderwidth=1, padx=0, pady=0, background=None, foreground=None, font=None, anchor=CENTER, separator=True):
+        Cell.__init__(self, master, background=background, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=borderwidth, bd= 0)
+        self.pack_propagate(False)
+
+        if separator and bordercolor is not None:
+            separator = Label(self, height=2, background=bordercolor, bd=0, highlightthickness=0, class_="Separator")
+            separator.pack(fill=X, anchor=anchor)
+
+        self._bottom_entry = Entry(self, background=background, foreground=foreground, font=font)
+        self._bottom_entry.pack(padx=padx, pady=pady, expand=True)
+        
+        self.update()
+        self.height = self._bottom_entry.winfo_reqheight() + 2*padx
+        self.width = self._bottom_entry.winfo_reqwidth() + 2*pady
+
+        self.configure(height=self.height, width=self.width)
+
         
 class Table(Frame):
     def __init__(self, master, columns, column_weights=None, column_minwidths=None, height=500, minwidth=20, minheight=20, padx=5, pady=5, cell_font=None, cell_foreground="black", cell_background="white", cell_anchor=W, header_font=None, header_background="white", header_foreground="black", header_anchor=CENTER, bordercolor = "#999999", innerborder=True, outerborder=True, stripped_rows=("#EEEEEE", "white"), on_change_data=None, mousewheel_speed = 2, scroll_horizontally=False, scroll_vertically=True):
@@ -262,6 +282,9 @@ class Table(Frame):
         self._head = Frame(self, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=outerborder_width, bd= 0)
         self._head.grid(row=0, column=0, sticky=E+W)
 
+        self._bottom = Frame(self, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=outerborder_width, bd= 0)
+        self._bottom.grid(row=len(columns), column=0, sticky=E+W)
+
         header_separator = False if outerborder else True
 
         for j in range(len(columns)):
@@ -269,6 +292,14 @@ class Table(Frame):
 
             header_cell = Header_Cell(self._head, text=column_name, borderwidth=self._innerborder_width, font=header_font, background=header_background, foreground=header_foreground, padx=padx, pady=pady, bordercolor=bordercolor, anchor=header_anchor, separator=header_separator)
             header_cell.grid(row=0, column=j, sticky=N+E+W+S)
+        
+        for j in range(len(columns)):
+            if j is 0:
+                _index_label = Label(self._bottom, text="i don't know how to retrieve the index :(", background=cell_background, foreground=cell_foreground, font=cell_font)
+                _index_label.grid(row=self._number_of_rows, column=j, sticky=N+E+W+S)
+            else:
+                bottom_cell = Bottom_Cell(self._bottom, text=column_name, borderwidth=self._innerborder_width, font=header_font, background=header_background, foreground=header_foreground, padx=padx, pady=pady, bordercolor=bordercolor, anchor=header_anchor, separator=header_separator)
+                bottom_cell.grid(row=self._number_of_rows, column=j, sticky=N+E+W+S)
 
         add_scrollbars = scroll_horizontally or scroll_vertically
         if add_scrollbars:
@@ -525,7 +556,7 @@ if __name__ == "__main__":
     table.pack(padx=10,pady=10)
 
     table.set_data([[1,2,3],[4,5,6], [7,8,9], [10,11,12], [13,14,15],[15,16,18], [19,20,21]])
-    table.cell(0,0, " a fdas fasd fasdf asdf asdfasdf asdf asdfa sdfas asd sadf ")
+    table.cell(0,0, "a fdas fasd fasdf asdf asdfasdf asdf asdfa sdfas asd sadf ")
     
     table.insert_row([22,23,24])
     table.insert_row([25,26,27])
