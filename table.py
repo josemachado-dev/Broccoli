@@ -1,9 +1,11 @@
 # Author: Miguel Martinez Lopez
 # Version: 0.20
 
+#Edited by José Machado
+
 from tkinter import Frame, Label, Message, StringVar, Canvas, Entry
 from tkinter.ttk import Scrollbar
-from tkinter.constants import *
+from tkinter.constants import N, W, E, S, X, Y, VERTICAL, HORIZONTAL, CENTER, END
 
 import platform
 
@@ -231,7 +233,6 @@ class Header_Cell(Cell):
         self.configure(height=height, width=width)
 
 class Bottom_Cell(Cell):
-    #Added by José Machado
     def __init__(self, master, text, bordercolor=None, borderwidth=1, padx=0, pady=0, background=None, foreground=None, font=None, anchor=CENTER, separator=True):
         Cell.__init__(self, master, background=background, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=borderwidth, bd= 0)
         self.pack_propagate(False)
@@ -297,7 +298,7 @@ class Table(Frame):
         
         for j in range(len(columns)):
             if j is 0:
-                self._index_label = Label(self._bottom, text="i don't know how to retrieve the index :(", background=cell_background, foreground=cell_foreground, font=cell_font)
+                self._index_label = Label(self._bottom, text=self._number_of_rows, background=cell_background, foreground=cell_foreground, font=cell_font)
                 self._index_label.grid(row=self._number_of_rows, column=j, sticky=N+E+W+S)
             else:
                 bottom_cell = Bottom_Cell(self._bottom, text=column_name, borderwidth=self._innerborder_width, font=header_font, background=header_background, foreground=header_foreground, padx=padx, pady=pady, bordercolor=bordercolor, anchor=header_anchor, separator=header_separator)
@@ -459,6 +460,7 @@ class Table(Frame):
 
     def column(self, index, data=None):
         number_of_rows = self._number_of_rows
+        number_of_columns = self._number_of_columns
 
         if data is None:
             column= []
@@ -566,6 +568,7 @@ if __name__ == "__main__":
     
     table.insert_row([22,23,24])
     table.insert_row([25,26,27])
+    table._change_index(table._number_of_rows + 1)
     
     root.update()
     root.geometry("%sx%s"%(root.winfo_reqwidth(),250))
