@@ -183,15 +183,10 @@ class Broccoli:
                 ##This shows new obj on the table
                 self.table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
 
-                self.enterText.delete(0, tk.END)
-                self.entercategory.delete(0, tk.END)
+                self.table.bottom_cells[0]._bottom_entry.delete(0, tk.END)
+                self.table.bottom_cells[1]._bottom_entry.delete(0, tk.END)
 
                 self.rootwindow.update()
-
-                ##This will allow to edit the line
-                ##NEEDS REWORK
-                ##newesttext.bind("<Double-Button-1>", self.beginedit)
-                ##newestcategory.bind("<Double-Button-1>", self.beginedit)
 
         self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
         self.table._change_index(len(self.phrasesdb) + 1)
