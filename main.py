@@ -20,6 +20,7 @@
 #External libraries
 import tkinter as tk
 import tkinter.filedialog
+import tkinter.messagebox
 import json
 import csv
 import webbrowser
@@ -77,7 +78,7 @@ class Broccoli:
         #File Menu Shortcuts
         self.rootwindow.bind("<Control-n>", lambda event: self.newfile())
         self.rootwindow.bind("<Control-s>", lambda event: self.savefile())
-        self.rootwindow.bind("<Control-S>", lambda event: self.debug())
+        self.rootwindow.bind("<Control-S>", lambda event: self.savefileas())
         self.rootwindow.bind("<Control-o>", lambda event: self.openfile())
         self.rootwindow.bind("<Control-e>", lambda event: self.exportfile())
 
@@ -132,6 +133,14 @@ class Broccoli:
         self.editcategory.grid(row=3, column=2)
 
     def newfile(self):
+        newfile = tkinter.messagebox.askquestion("New File?", "Are you sure you want to create a new file?")
+        if newfile == "no":
+            return
+
+        save = tkinter.messagebox.askquestion("Save?","Do you want to save before you create a new file?")
+        if save == "yes":
+            self.savefile()
+
         self.updatestatusprocess("Cleaning table")
         self.table._pop_n_rows(len(self.phrasesdb))
 
