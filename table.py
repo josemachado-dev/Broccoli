@@ -295,8 +295,8 @@ class Table(Frame):
         
         for j in range(len(columns)):
             if j is 0:
-                _index_label = Label(self._bottom, text="i don't know how to retrieve the index :(", background=cell_background, foreground=cell_foreground, font=cell_font)
-                _index_label.grid(row=self._number_of_rows, column=j, sticky=N+E+W+S)
+                self._index_label = Label(self._bottom, text="i don't know how to retrieve the index :(", background=cell_background, foreground=cell_foreground, font=cell_font)
+                self._index_label.grid(row=self._number_of_rows, column=j, sticky=N+E+W+S)
             else:
                 bottom_cell = Bottom_Cell(self._bottom, text=column_name, borderwidth=self._innerborder_width, font=header_font, background=header_background, foreground=header_foreground, padx=padx, pady=pady, bordercolor=bordercolor, anchor=header_anchor, separator=header_separator)
                 bottom_cell.grid(row=self._number_of_rows, column=j, sticky=N+E+W+S)
@@ -350,6 +350,9 @@ class Table(Frame):
                 self._body.grid_columnconfigure(j, minsize=minwidth)
 
         self._on_change_data = on_change_data
+
+    def _change_index(self, n):
+        self._index_label.configure(text=n)
 
     def _append_n_rows(self, n):
         number_of_rows = self._number_of_rows
@@ -563,5 +566,7 @@ if __name__ == "__main__":
     
     root.update()
     root.geometry("%sx%s"%(root.winfo_reqwidth(),250))
+
+    table._change_index(3)
 
     root.mainloop()

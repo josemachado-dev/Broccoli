@@ -102,10 +102,11 @@ class Broccoli:
 
         self.table = tbl.Table(self.tableframe, ["index", "text", "category"], column_minwidths=[None, None, None])
         self.columns = 3
-        self.table.pack(padx=10,pady=10)
+        self.table.pack(padx=1,pady=1)
+        self.table._change_index(len(self.phrasesdb) + 1)
 
         self.createinputs()
-
+        
         self.rootwindow.update()
         self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
 
@@ -151,6 +152,7 @@ class Broccoli:
         self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
         self.updatestatusprocess("")
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
+        self.table._change_index(len(self.phrasesdb) + 1)
         self.rootwindow.update()
 
     def openfile(self):
@@ -192,6 +194,7 @@ class Broccoli:
                 ##newestcategory.bind("<Double-Button-1>", self.beginedit)
 
         self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
+        self.table._change_index(len(self.phrasesdb) + 1)
         self.rootwindow.update()
 
     def savefile(self):
@@ -249,6 +252,8 @@ class Broccoli:
         self.entercategory.delete(0, tk.END)
 
         self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
+
+        self.table._change_index(len(self.phrasesdb) + 1)
 
         self.enterText.focus_set()
         self.rootwindow.update()
