@@ -256,6 +256,8 @@ class Table(Frame):
 
         Frame.__init__(self,master, bd= 0)
 
+        self.bottom_cells = []
+
         self._cell_background = cell_background
         self._cell_foreground = cell_foreground
         self._cell_font = cell_font
@@ -300,6 +302,7 @@ class Table(Frame):
             else:
                 bottom_cell = Bottom_Cell(self._bottom, text=column_name, borderwidth=self._innerborder_width, font=header_font, background=header_background, foreground=header_foreground, padx=padx, pady=pady, bordercolor=bordercolor, anchor=header_anchor, separator=header_separator)
                 bottom_cell.grid(row=self._number_of_rows, column=j, sticky=N+E+W+S)
+                self.bottom_cells.append(bottom_cell)
 
         add_scrollbars = scroll_horizontally or scroll_vertically
         if add_scrollbars:
@@ -566,7 +569,5 @@ if __name__ == "__main__":
     
     root.update()
     root.geometry("%sx%s"%(root.winfo_reqwidth(),250))
-
-    table._change_index(3)
 
     root.mainloop()
