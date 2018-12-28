@@ -62,6 +62,7 @@ class Broccoli:
 
         #Definition of root window
         self.rootwindow = tk.Tk()
+        self.rootwindow.iconbitmap(default='img\\broccoli.ico')
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.rootwindow.state("zoomed")
 
