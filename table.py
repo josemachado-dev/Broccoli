@@ -140,7 +140,7 @@ class Scrolling_Area(Frame, object):
                 self.xscrollbar = xscrollbar
             else:
                 self.xscrollbar = Scrollbar(self, orient=HORIZONTAL)
-                self.xscrollbar.grid(row=1, column=0, sticky=E+W)
+                self.xscrollbar.grid(row=1, column=0, sticky=N+E+W+S)
             
             self.canvas.configure(xscrollcommand=self.xscrollbar.set)
             self.xscrollbar['command']=self.canvas.xview
@@ -220,7 +220,7 @@ class Header_Cell(Cell):
         self.pack_propagate(False)
 
         self._header_label = Label(self, text=text, background=background, foreground=foreground, font=font)
-        self._header_label.pack(padx=padx, pady=pady, expand=True, fill=X)
+        self._header_label.pack(padx=padx, pady=pady, expand=True, fill="both")
 
         if separator and bordercolor is not None:
             separator = Frame(self, height=2, background=bordercolor, bd=0, highlightthickness=0, class_="Separator")
@@ -252,7 +252,7 @@ class Bottom_Cell(Cell):
 
         
 class Table(Frame):
-    def __init__(self, master, columns, column_weights=None, column_minwidths=None, height=500, minwidth=20, minheight=20, padx=5, pady=5, cell_font=None, cell_foreground="black", cell_background="white", cell_anchor=W, header_font=None, header_background="white", header_foreground="black", header_anchor=CENTER, bordercolor = "#999999", innerborder=True, outerborder=True, stripped_rows=("#EEEEEE", "white"), on_change_data=None, mousewheel_speed = 2, scroll_horizontally=False, scroll_vertically=True):
+    def __init__(self, master, columns, column_weights=None, column_minwidths=None, height=500, minwidth=20, minheight=20, padx=0, pady=0, cell_font=None, cell_foreground="black", cell_background="white", cell_anchor=W, header_font=None, header_background="white", header_foreground="black", header_anchor=CENTER, bordercolor = "#999999", innerborder=True, outerborder=True, stripped_rows=("#EEEEEE", "white"), on_change_data=None, mousewheel_speed = 2, scroll_horizontally=False, scroll_vertically=True):
         outerborder_width = 1 if outerborder else 0
 
         Frame.__init__(self,master, bd= 0)
@@ -283,10 +283,10 @@ class Table(Frame):
         self.grid_rowconfigure(1, weight=1)
         
         self._head = Frame(self, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=outerborder_width, bd= 0)
-        self._head.grid(row=0, column=0, sticky=E+W)
+        self._head.grid(row=0, column=0, sticky=N+E+W+S)
 
         self._bottom = Frame(self, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=outerborder_width, bd= 0)
-        self._bottom.grid(row=len(columns), column=0, sticky=E+W)
+        self._bottom.grid(row=len(columns), column=0, sticky=N+E+W+S)
 
         header_separator = False if outerborder else True
 
@@ -309,7 +309,7 @@ class Table(Frame):
         if add_scrollbars:
             if scroll_horizontally:
                 xscrollbar = Scrollbar(self, orient=HORIZONTAL)
-                xscrollbar.grid(row=2, column=0, sticky=E+W)
+                xscrollbar.grid(row=2, column=0, sticky=N+E+W+S)
             else:
                 xscrollbar = None
 
@@ -320,7 +320,7 @@ class Table(Frame):
                 yscrollbar = None
 
             scrolling_area = Scrolling_Area(self, width=self._head.winfo_reqwidth(), height=height, scroll_horizontally=scroll_horizontally, xscrollbar=xscrollbar, scroll_vertically=scroll_vertically, yscrollbar=yscrollbar)
-            scrolling_area.grid(row=1, column=0, sticky=E+W)
+            scrolling_area.grid(row=1, column=0, sticky=N+E+W+S)
 
             self._body = Frame(scrolling_area.innerframe, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=outerborder_width, bd= 0)
             self._body.pack(expand=1, fill=X)
