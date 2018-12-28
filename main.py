@@ -21,6 +21,7 @@
 import tkinter as tk
 import tkinter.filedialog
 import tkinter.messagebox
+from tkinter.ttk import Combobox, Notebook
 import json
 import csv
 import webbrowser
@@ -64,11 +65,15 @@ class Broccoli:
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.rootwindow.state("zoomed")
 
+        self.tabcontrol = Notebook(self.rootwindow)
+
         self.assembletopmenu()
         self.assembletable()
         self.assemblestatusbar()
 
         self.keybinds()
+
+        self.tabcontrol.pack(expand=1, fill="both")
 
         #Root Window draw
         self.rootwindow.update()
@@ -97,22 +102,22 @@ class Broccoli:
         self.edittext.bind("<Return>", lambda event: self.editcategory.focus_set())
         self.editcategory.bind("<Return>", lambda event: self.editline())
 
-    def assembletable(self):
-        self.tableframe = tk.Frame(self.rootwindow)
-        self.tableframe.pack(fill=tk.X)
+    def assembletable(self, tablename="New Table"):
+        self.tableframe = tk.Frame(self.tabcontrol)
+        self.tabcontrol.add(self.tableframe, text=tablename)
 
         self.table = tbl.Table(self.tableframe, ["index", "text", "category"], column_minwidths=[None, None, None])
         self.columns = 3
-        self.table.pack(padx=1,pady=1)
+        self.table.pack(expand=1, fill="both", padx=1,pady=1)
         self.table._change_index(len(self.phrasesdb) + 1)
 
-        self.createinputs()
+        self.createeditinputs()
         
         self.rootwindow.update()
         self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
 
-    def createinputs(self):
-        self.enteryframe = tk.Frame(self.rootwindow)
+    def createeditinputs(self):
+        self.enteryframe = tk.Frame(self.tableframe)
         self.enteryframe.pack(fill=tk.X)
 
         self.breakindex = tk.Label(self.enteryframe, text="VV Edit line in table VV")

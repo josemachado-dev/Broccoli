@@ -151,7 +151,7 @@ class Scrolling_Area(Frame, object):
         self.columnconfigure(0, weight=1)
         
         self.innerframe = inner_frame(self.canvas, **kw)
-        self.innerframe.pack(anchor=anchor)
+        self.innerframe.pack(expand=1, fill=X, anchor=anchor)
         
         self.canvas.create_window(0, 0, window=self.innerframe, anchor='nw', tags="inner_frame")
 
@@ -212,7 +212,7 @@ class Data_Cell(Cell):
         Cell.__init__(self, master, background=background, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=borderwidth, bd= 0)
 
         self._message_widget = Message(self, textvariable=variable, font=font, background=background, foreground=foreground)
-        self._message_widget.pack(expand=True, padx=padx, pady=pady, anchor=anchor)
+        self._message_widget.pack(expand=True, fill=X, padx=padx, pady=pady, anchor=anchor)
 
 class Header_Cell(Cell):
     def __init__(self, master, text, bordercolor=None, borderwidth=1, padx=0, pady=0, background=None, foreground=None, font=None, anchor=CENTER, separator=True):
@@ -220,11 +220,11 @@ class Header_Cell(Cell):
         self.pack_propagate(False)
 
         self._header_label = Label(self, text=text, background=background, foreground=foreground, font=font)
-        self._header_label.pack(padx=padx, pady=pady, expand=True)
+        self._header_label.pack(padx=padx, pady=pady, expand=True, fill=X)
 
         if separator and bordercolor is not None:
             separator = Frame(self, height=2, background=bordercolor, bd=0, highlightthickness=0, class_="Separator")
-            separator.pack(fill=X, anchor=anchor)
+            separator.pack(expand= 1, fill=X, anchor=anchor)
 
         self.update()
         height = self._header_label.winfo_reqheight() + 2*padx
@@ -239,10 +239,10 @@ class Bottom_Cell(Cell):
 
         if separator and bordercolor is not None:
             separator = Label(self, height=2, background=bordercolor, bd=0, highlightthickness=0, class_="Separator")
-            separator.pack(fill=X, anchor=anchor)
+            separator.pack(expand=1, fill=X, anchor=anchor)
 
         self._bottom_entry = Entry(self, background=background, foreground=foreground, font=font)
-        self._bottom_entry.pack(padx=padx, pady=pady, expand=True)
+        self._bottom_entry.pack(padx=padx, pady=pady, expand=True, fill=X)
         
         self.update()
         self.height = self._bottom_entry.winfo_reqheight() + 2*padx
@@ -323,7 +323,7 @@ class Table(Frame):
             scrolling_area.grid(row=1, column=0, sticky=E+W)
 
             self._body = Frame(scrolling_area.innerframe, highlightbackground=bordercolor, highlightcolor=bordercolor, highlightthickness=outerborder_width, bd= 0)
-            self._body.pack()
+            self._body.pack(expand=1, fill=X)
             
             def on_change_data():
                 scrolling_area.update_viewport()
@@ -561,7 +561,7 @@ if __name__ == "__main__":
     root = Tk()
 
     table = Table(root, ["column A", "column B", "column C"], column_minwidths=[None, None, None])
-    table.pack(padx=10,pady=10)
+    table.pack(expand=1, fill="both", padx=10,pady=10)
 
     table.set_data([[1,2,3],[4,5,6], [7,8,9], [10,11,12], [13,14,15],[15,16,18], [19,20,21]])
     table.cell(0,0, "a fdas fasd fasdf asdf asdfasdf asdf asdfa sdfas asd sadf ")
