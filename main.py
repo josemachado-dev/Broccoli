@@ -82,7 +82,7 @@ class Broccoli:
     
     def keybinds(self):
         #File Menu Shortcuts
-        self.rootwindow.bind("<Control-n>", lambda event: self.newfile())
+        self.rootwindow.bind("<Control-n>", lambda event: self.newproject())
         self.rootwindow.bind("<Control-s>", lambda event: self.savefile())
         self.rootwindow.bind("<Control-S>", lambda event: self.savefileas())
         self.rootwindow.bind("<Control-o>", lambda event: self.openfile())
@@ -103,21 +103,21 @@ class Broccoli:
         self.edittext.bind("<Return>", lambda event: self.editcategory.focus_set())
         self.editcategory.bind("<Return>", lambda event: self.editline())
 
-    def assembletable(self, tablename="New Table"):
+    def assembletable(self, tablename="New Table", columns=3, titles=["index", "text", "category"]):
         self.tableframe = tk.Frame(self.tabcontrol)
         self.tabcontrol.add(self.tableframe, text=tablename)
 
-        self.table = tbl.Table(self.tableframe, ["index", "text", "category"], column_minwidths=[None, None, None])
-        self.columns = 3
+        self.columns = columns
+        self.table = tbl.Table(self.tableframe, titles)
         self.table.pack(expand=1, fill="both", padx=1,pady=1)
         self.table._change_index(len(self.phrasesdb) + 1)
 
-        self.createeditinputs()
-        
+        self.createeditinputs()        
         self.rootwindow.update()
-        self.rootwindow.geometry("%sx%s"%(self.rootwindow.winfo_reqwidth(),250))
 
     def createeditinputs(self):
+        #this will be irrelevant once a better method of implementing the edit is arranjed
+        #at that point, this whole def can be deleted
         self.enteryframe = tk.Frame(self.tableframe)
         self.enteryframe.pack(fill=tk.X)
 
@@ -138,9 +138,9 @@ class Broccoli:
         self.editcategory = tk.Entry(self.enteryframe)
         self.editcategory.grid(row=3, column=2)
 
-    def newfile(self):
-        newfile = tkinter.messagebox.askquestion("New File?", "Are you sure you want to create a new file?")
-        if newfile == "no":
+    def newproject(self):
+        newproject = tkinter.messagebox.askquestion("New File?", "Are you sure you want to create a new file?")
+        if newproject == "no":
             return
 
         save = tkinter.messagebox.askquestion("Save?","Do you want to save before you create a new file?")
@@ -227,9 +227,6 @@ class Broccoli:
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.rootwindow.update()
 
-    def exitapp(self):
-        self.rootwindow.destroy()
-
     def reportbug(self):
         webbrowser.open("https://github.com/josemachado-dev/improved-broccoli/issues/new/choose", new=2, autoraise=True)
     
@@ -291,7 +288,7 @@ class Broccoli:
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="File", menu=self.filesubmenu)
 
-        self.filesubmenu.add_command(label="New File    Ctrl+n", command=self.newfile)
+        self.filesubmenu.add_command(label="New File    Ctrl+n", command=self.newproject)
 
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Open    Ctrl+o", command=self.openfile)
@@ -304,7 +301,7 @@ class Broccoli:
         self.filesubmenu.add_command(label="Export    Ctrl+e", command=self.exportfile)
 
         self.filesubmenu.add_separator()
-        self.filesubmenu.add_command(label="Exit", command=self.exitapp)
+        self.filesubmenu.add_command(label="Exit", command=self.rootwindow.destroy)
     
     def createeditmenu(self):
         self.editmenu = tk.Menu(self.menu, tearoff=0)
