@@ -68,8 +68,10 @@ class Broccoli:
 
         self.tabcontrol = Notebook(self.rootwindow)
 
+        self.tables = []
+
         self.assembletopmenu()
-        self.assembletable()
+        self.landingpage()
         self.assemblestatusbar()
 
         self.keybinds()
@@ -95,27 +97,45 @@ class Broccoli:
         #Help Menu Shortcuts
         self.rootwindow.bind("<F1>", lambda event: self.showdocumentation())
 
-        #Assorted Shortcuts
-        self.table.bottom_cells[0]._bottom_entry.bind("<Return>", lambda event: self.table.bottom_cells[1]._bottom_entry.focus_set())
-        self.table.bottom_cells[1]._bottom_entry.bind("<Return>", lambda event: self.addline())
+    def landingpage(self):
+        buttonframe = tk.Frame(self.rootwindow)
+        buttonframe.pack(expand=1, fill="both")
 
-        self.indexedit.bind("<Return>", lambda event: self.edittext.focus_set())
-        self.edittext.bind("<Return>", lambda event: self.editcategory.focus_set())
-        self.editcategory.bind("<Return>", lambda event: self.editline())
+        self.landing_newtable = tk.Button(buttonframe, text="New Project", padx=5, pady=5)
+        self.landing_newtable.bind("<Button-1>", lambda event: self.createtable())
+        self.landing_newtable.pack(expand=1)
+        
+        self.landing_openproject = tk.Button(buttonframe, text="Open Project", padx=5, pady=5)
+        self.landing_openproject.bind("<Button-1>", lambda event: self.openfile())
+        self.landing_openproject.pack(expand=1)
 
-    def assembletable(self, tablename="New Table", columns=3, titles=["index", "text", "category"]):
+        self.landing_help = tk.Button(buttonframe, text="Help", padx=5, pady=5)
+        self.landing_help.bind("<Button-1>", lambda event: self.showdocumentation())
+        self.landing_help.pack(expand=1)
+
+        self.landingbuttons = [self.landing_newtable, self.landing_openproject, buttonframe]
+
+    def createtable(self, tablename="New Table", columns=3, titles=["index", "text", "category"]):
+        for item in self.landingbuttons:
+            item.pack_forget()
+
+        #Creates a new tab and a new table in it
         self.tableframe = tk.Frame(self.tabcontrol)
         self.tabcontrol.add(self.tableframe, text=tablename)
 
-        self.columns = columns
-        self.table = tbl.Table(self.tableframe, titles)
-        self.table.pack(expand=1, fill="both", padx=1,pady=1)
-        self.table._change_index(len(self.phrasesdb) + 1)
+        columns = columns
+        table = tbl.Table(self.tableframe, titles)
+        table.pack(expand=1, fill="both", padx=1,pady=1)
+        table._change_index(len(self.phrasesdb) + 1)
+        self.tables.append(table)
 
-        self.createeditinputs()        
+        table.bottom_cells[0]._bottom_entry.bind("<Return>", lambda event: table.bottom_cells[1]._bottom_entry.focus_set())
+        table.bottom_cells[1]._bottom_entry.bind("<Return>", lambda event: self.addline(table))
+
+        self.createeditinputs(table)        
         self.rootwindow.update()
 
-    def createeditinputs(self):
+    def createeditinputs(self, table):
         #this will be irrelevant once a better method of implementing the edit is arranjed
         #at that point, this whole def can be deleted
         self.enteryframe = tk.Frame(self.tableframe)
@@ -138,7 +158,14 @@ class Broccoli:
         self.editcategory = tk.Entry(self.enteryframe)
         self.editcategory.grid(row=3, column=2)
 
+        self.indexedit.bind("<Return>", lambda event: self.edittext.focus_set())
+        self.edittext.bind("<Return>", lambda event: self.editcategory.focus_set())
+        self.editcategory.bind("<Return>", lambda event: self.editline(table))
+
     def newproject(self):
+        for item in self.landingbuttons:
+            item.pack_forget()
+
         newproject = tkinter.messagebox.askquestion("New File?", "Are you sure you want to create a new file?")
         if newproject == "no":
             return
@@ -148,14 +175,15 @@ class Broccoli:
             self.savefile()
 
         self.updatestatusprocess("Cleaning table")
-        self.table._pop_n_rows(len(self.phrasesdb))
+        for table in self.tables:
+            table._pop_n_rows(len(self.phrasesdb))
+            self.tables.pop(table)
 
         self.updatestatusprocess("Creating new file")
         self.db.currentfilename = "Untitled-1.json"
         self.db.savedbefore = False
         self.phrasesdb = []
 
-        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
         self.updatestatusprocess("")
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.table._change_index(len(self.phrasesdb) + 1)
@@ -169,7 +197,9 @@ class Broccoli:
             return
 
         self.updatestatusprocess("Cleaning table")
-        self.table._pop_n_rows(len(self.phrasesdb))
+        for table in self.tables:
+                    table._pop_n_rows(len(self.phrasesdb))
+                    self.tables.pop(table)
         self.phrasesdb = []
 
         self.updatestatusprocess("Opening file at " + f)
@@ -194,7 +224,9 @@ class Broccoli:
 
                 self.rootwindow.update()
 
-        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
+        for item in self.landingbuttons:
+            item.pack_forget()
+
         self.table._change_index(len(self.phrasesdb) + 1)
         self.rootwindow.update()
 
@@ -237,39 +269,39 @@ class Broccoli:
         #url should be updated if documentation changes places, for example, a wiki is created
         webbrowser.open("https://github.com/josemachado-dev/improved-broccoli", new=2, autoraise=True)
 
-    def addline(self):
+    def addline(self, table):
         #Add obj to list
-        newobj = {"text": self.table.bottom_cells[0]._bottom_entry.get(), "category": self.table.bottom_cells[1]._bottom_entry.get()}
+        newobj = {"text": table.bottom_cells[0]._bottom_entry.get(), "category": table.bottom_cells[1]._bottom_entry.get()}
 
         self.phrasesdb.append(newobj)
 
-        self.table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
+        table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
 
-        self.table.bottom_cells[0]._bottom_entry.delete(0, tk.END)
-        self.table.bottom_cells[1]._bottom_entry.delete(0, tk.END)
+        table.bottom_cells[0]._bottom_entry.delete(0, tk.END)
+        table.bottom_cells[1]._bottom_entry.delete(0, tk.END)
 
-        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
+        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), table.columns))
 
-        self.table._change_index(len(self.phrasesdb) + 1)
+        table._change_index(len(self.phrasesdb) + 1)
 
-        self.table.bottom_cells[0]._bottom_entry.focus_set()
+        table.bottom_cells[0]._bottom_entry.focus_set()
         self.rootwindow.update()
 
-    def editline(self):
+    def editline(self, table):
         #Commits the edit of a given line
         self.index = int(self.indexedit.get())
 
         if(self.edittext != ""):
-            self.table.cell(self.index, 1, self.edittext.get())
+            table.cell(self.index, 1, self.edittext.get())
 
         if(self.editcategory != ""):
-            self.table.cell(self.index, 2, self.editcategory.get())
+            table.cell(self.index, 2, self.editcategory.get())
 
-    def removeline(self, n):
+    def removeline(self, table, n):
         #Remove obj from list, given it's index
 
-        self.table.delete_row(n)
-        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), self.columns))
+        table.delete_row(n)
+        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), table.columns))
 
     def exportfile(self):
         self.updatestatusprocess("Exporting file...")
