@@ -29,6 +29,7 @@ import webbrowser
 #Internal libraries
 import table as tbl
 import spellchecker
+import userpreferences as uprefs
 
 #Defining the database and its funtions
 class DB:
@@ -89,6 +90,7 @@ class Broccoli:
         self.rootwindow.bind("<Control-S>", lambda event: self.savefileas())
         self.rootwindow.bind("<Control-o>", lambda event: self.openfile())
         self.rootwindow.bind("<Control-e>", lambda event: self.exportfile())
+        self.rootwindow.bind("<Control-p>", lambda event: uprefs.PreferencesWindow())
 
         #Edit Menu Shortcuts
         #self.rootwindow.bind("<Control-z>", lambda event: self.debug()) #Will serve as "undo"
@@ -331,6 +333,10 @@ class Broccoli:
 
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Export    Ctrl+e", command=self.exportfile)
+
+        self.filesubmenu.add_separator()
+        self.filesubmenu.add_command(label="Preferences    Ctrl+p", command= lambda: uprefs.PreferencesWindow())
+
 
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Exit", command=self.rootwindow.destroy)
