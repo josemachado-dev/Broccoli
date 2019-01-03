@@ -225,7 +225,7 @@ class Broccoli:
         self.updatestatusprocess("")
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
 
-        self.createtable()
+        self.createtable(tablename, columns, titles)
 
         self.rootwindow.update()
 
@@ -250,6 +250,8 @@ class Broccoli:
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
         self.rootwindow.update()
 
+        self.createtable()
+
         with open(f if f is not None else self.db.currentfilename, "r") as file:
             data = json.load(file)
             for thing in data:
@@ -257,17 +259,20 @@ class Broccoli:
                 self.phrasesdb.append(newobj)
 
                 ##This shows new obj on the table
-                self.table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
+                for table in self.tables:
+                    table.insert_row([len(self.phrasesdb), newobj["text"], newobj["category"]])
 
-                self.table.bottom_cells[0]._bottom_entry.delete(0, tk.END)
-                self.table.bottom_cells[1]._bottom_entry.delete(0, tk.END)
+                for table in self.tables:
+                    table.bottom_cells[0]._bottom_entry.delete(0, tk.END)
+                    table.bottom_cells[1]._bottom_entry.delete(0, tk.END)
 
                 self.rootwindow.update()
 
         for item in self.landingbuttons:
             item.pack_forget()
 
-        self.table._change_index(len(self.phrasesdb) + 1)
+        for table in self.tables:
+            table._change_index(len(self.phrasesdb) + 1)
         self.rootwindow.update()
 
     def savefile(self):
