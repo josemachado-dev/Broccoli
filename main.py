@@ -158,16 +158,17 @@ class Broccoli:
         self.tableframe = tk.Frame(self.tabcontrol)
         self.tabcontrol.add(self.tableframe, text=tablename)
 
-        columns = columns
         table = tbl.Table(self.tableframe, titles)
         table.pack(expand=1, fill="both", padx=1,pady=1)
         table._change_index(len(self.phrasesdb) + 1)
         self.tables.append(table)
+        table.columns = columns
 
         table.bottom_cells[0]._bottom_entry.bind("<Return>", lambda event: table.bottom_cells[1]._bottom_entry.focus_set())
         table.bottom_cells[1]._bottom_entry.bind("<Return>", lambda event: self.addline(table))
 
-        self.createeditinputs(table)        
+        self.createeditinputs(table)
+        self.updatestatusmetrics("Columns: %d | Rows: %d" % (table.columns, len(self.phrasesdb)))
         self.rootwindow.update()
 
     def createeditinputs(self, table):
@@ -325,7 +326,7 @@ class Broccoli:
         table.bottom_cells[0]._bottom_entry.delete(0, tk.END)
         table.bottom_cells[1]._bottom_entry.delete(0, tk.END)
 
-        #self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), table.columns))
+        self.updatestatusmetrics("Columns: %d | Rows: %d" % (table.columns, len(self.phrasesdb)))
 
         table._change_index(len(self.phrasesdb) + 1)
 
@@ -346,7 +347,7 @@ class Broccoli:
         #Remove obj from list, given it's index
 
         table.delete_row(n)
-        #self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), table.columns))
+        self.updatestatusmetrics("Columns: %d | Rows: %d" % (table.columns, len(self.phrasesdb)))
 
     def exportfile(self):
         self.updatestatusprocess("Exporting file...")
@@ -421,7 +422,7 @@ class Broccoli:
         self.statusprocess = tk.Label(self.statusframe, text="", anchor=tk.W)
         self.statusprocess.pack(side=tk.RIGHT)
 
-        self.statusmetrics = tk.Label(self.statusframe, text="Rows: 0 | Columns: 3", anchor=tk.W)
+        self.statusmetrics = tk.Label(self.statusframe, text="Columns: 0 | Rows: 0", anchor=tk.W)
         self.statusmetrics.pack(side=tk.LEFT)
     
     def updatestatusprocess(self, text):
