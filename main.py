@@ -38,9 +38,9 @@ class DB:
         self.savedbefore = False
         self.phrases = []
 
-    def save(self, filename=None):
+    def save(self, filename=None, phrasesdb=[]):
         with open(filename if filename is not None else self.currentfilename, "w") as file:
-            json.dump(self.phrases, file, indent=2)
+            json.dump(phrasesdb, file, indent=2)
     
     def export(self, phrasesdb, filename):
         with open(filename, "w") as file:
@@ -278,7 +278,7 @@ class Broccoli:
     def savefile(self):
         if self.db.savedbefore:
             self.updatestatusprocess("Saving file to " + self.db.currentfilename)
-            self.db.save()
+            self.db.save(self.db.currentfilename, self.phrasesdb)
 
             self.updatestatusprocess("")
             self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
@@ -298,7 +298,7 @@ class Broccoli:
 
         self.db.currentfilename = f
         self.db.savedbefore = True
-        self.db.save(f)
+        self.db.save(f, self.phrasesdb)
 
         self.updatestatusprocess("")
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
@@ -325,7 +325,7 @@ class Broccoli:
         table.bottom_cells[0]._bottom_entry.delete(0, tk.END)
         table.bottom_cells[1]._bottom_entry.delete(0, tk.END)
 
-        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), table.columns))
+        #self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), table.columns))
 
         table._change_index(len(self.phrasesdb) + 1)
 
@@ -346,7 +346,7 @@ class Broccoli:
         #Remove obj from list, given it's index
 
         table.delete_row(n)
-        self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), table.columns))
+        #self.updatestatusmetrics("Rows: %d | Columns: %d" % (len(self.phrasesdb), table.columns))
 
     def exportfile(self):
         self.updatestatusprocess("Exporting file...")
