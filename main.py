@@ -334,7 +334,7 @@ class Broccoli:
 
     def editline(self, table):
         #Commits the edit of a given line
-        self.index = int(self.indexedit.get())
+        self.index = int(self.indexedit.get()) - 1
 
         if(self.edittext != ""):
             table.cell(self.index, 1, self.edittext.get())
