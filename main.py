@@ -85,7 +85,7 @@ class Broccoli:
     
     def keybinds(self):
         #File Menu Shortcuts
-        self.rootwindow.bind("<Control-n>", lambda event: self.newproject())
+        self.rootwindow.bind("<Control-n>", lambda event: self.newprojectwindow())
         self.rootwindow.bind("<Control-s>", lambda event: self.savefile())
         self.rootwindow.bind("<Control-S>", lambda event: self.savefileas())
         self.rootwindow.bind("<Control-o>", lambda event: self.openfile())
@@ -103,9 +103,9 @@ class Broccoli:
         buttonframe = tk.Frame(self.rootwindow)
         buttonframe.pack(expand=1, fill="both")
 
-        self.landing_newtable = tk.Button(buttonframe, text="New Project", padx=5, pady=5)
-        self.landing_newtable.bind("<Button-1>", lambda event: self.createtable())
-        self.landing_newtable.pack(expand=1)
+        self.landing_newproject = tk.Button(buttonframe, text="New Project", padx=5, pady=5)
+        self.landing_newproject.bind("<Button-1>", lambda event: self.newprojectwindow())
+        self.landing_newproject.pack(expand=1)
         
         self.landing_openproject = tk.Button(buttonframe, text="Open Project", padx=5, pady=5)
         self.landing_openproject.bind("<Button-1>", lambda event: self.openfile())
@@ -115,9 +115,42 @@ class Broccoli:
         self.landing_help.bind("<Button-1>", lambda event: self.showdocumentation())
         self.landing_help.pack(expand=1)
 
-        self.landingbuttons = [self.landing_newtable, self.landing_openproject, buttonframe]
+        self.landingbuttons = [self.landing_newproject, self.landing_openproject, buttonframe]
+    
+    def newprojectwindow(self):
+        padx = 10
 
-    def createtable(self, tablename="New Table", columns=3, titles=["index", "text", "category"]):
+        self.newprojwindow = tk.Tk()
+        self.newprojwindow.resizable(width=tk.FALSE, height=tk.FALSE)
+        self.newprojwindow.geometry("%sx%s"%(self.newprojwindow.winfo_reqwidth(), 100))
+
+        #columnlabel = tk.Label(self.newprojwindow, text="Rows #", padx=padx)
+        #columnlabel.grid(row=0, column=0, sticky=tk.W)
+        #self.rowcount = tk.Entry(self.newprojwindow, width = 5)
+        #self.rowcount.grid(row=0, column=1, sticky=tk.W)
+        #columnnamelabel = tk.Label(self.newprojwindow, text="Column", padx=padx)
+        #columnnamelabel.grid(row=1, column=0, sticky=tk.W)
+        #self.columnname = tk.ttk.Combobox(self.newprojwindow, width = 15)
+        #self.columnname["values"] = ["Text", "Category"]
+        #self.columnname.set("Text")
+        #self.columnname.grid(row=1, column=1, sticky=tk.W)
+
+        label = tk.Label(self.newprojwindow, text="new project?", padx=padx) #this serves just so a empty window doesn't appear while we don't implement the "how many columns do you want, and what are their titles?"
+        label.grid(row=0, column=0, sticky=tk.W)
+
+        confirm_button = tk.Button(self.newprojwindow, text="Confirm", command = lambda: self.newproject())
+        confirm_button.grid(row=5, column=0)
+        cancel_button = tk.Button(self.newprojwindow, text="Cancel", command = lambda: self.newprojwindow.destroy())
+        cancel_button.grid(row=5, column=1)
+
+        #Root Window draw
+        self.newproject_holder = []
+        self.newproject_holder.append(self.newprojwindow)
+        self.newprojwindow.update()
+        self.newprojwindow.mainloop()
+
+
+    def createtable(self, tablename="New Table", columns=3, titles=["#", "text", "category"]):
         for item in self.landingbuttons:
             item.pack_forget()
 
@@ -164,13 +197,16 @@ class Broccoli:
         self.edittext.bind("<Return>", lambda event: self.editcategory.focus_set())
         self.editcategory.bind("<Return>", lambda event: self.editline(table))
 
-    def newproject(self):
-        for item in self.landingbuttons:
-            item.pack_forget()
+    def newproject(self, tablename="New Table", columns=3, titles=["#", "text", "category"]):
+        if self.newprojwindow is not None:
+            self.newprojwindow.destroy()
 
         newproject = tkinter.messagebox.askquestion("New File?", "Are you sure you want to create a new file?")
         if newproject == "no":
             return
+
+        for item in self.landingbuttons:
+            item.pack_forget()
 
         save = tkinter.messagebox.askquestion("Save?","Do you want to save before you create a new file?")
         if save == "yes":
@@ -188,7 +224,9 @@ class Broccoli:
 
         self.updatestatusprocess("")
         self.rootwindow.title(self.db.currentfilename + " - improved-broccoli")
-        self.table._change_index(len(self.phrasesdb) + 1)
+
+        self.createtable()
+
         self.rootwindow.update()
 
     def openfile(self):
@@ -322,7 +360,7 @@ class Broccoli:
         self.filesubmenu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="File", menu=self.filesubmenu)
 
-        self.filesubmenu.add_command(label="New File    Ctrl+n", command=self.newproject)
+        self.filesubmenu.add_command(label="New File    Ctrl+n", command=self.newprojectwindow)
 
         self.filesubmenu.add_separator()
         self.filesubmenu.add_command(label="Open    Ctrl+o", command=self.openfile)
