@@ -1,5 +1,5 @@
 # improved-broccoli
-[not yet named project] aims to be a tool that serves as a bridge between game writers and game programmers
+improved-broccoli aims to be a tool that serves as a bridge between game writers and game programmers
 
 ![ReadMe Diagram](img/README_Diagram.png)
 
