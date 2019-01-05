@@ -59,7 +59,7 @@ class Broccoli:
     def __init__(self, db):
         self.phrasesdb = db.phrases
         self.db = db
-        self.db.currentfilename = "Untitled-1.json"
+        self.db.currentfilename = "Untitled.json"
 
         #Definition of root window
         self.rootwindow = tk.Tk()
@@ -119,10 +119,11 @@ class Broccoli:
     
     def newprojectwindow(self):
         padx = 10
+        maxcolumns = 100
 
         self.newprojwindow = tk.Tk()
         self.newprojwindow.resizable(width=tk.FALSE, height=tk.FALSE)
-        self.newprojwindow.geometry("%sx%s"%(self.newprojwindow.winfo_reqwidth(), 100))
+        self.newprojwindow.geometry("%sx%s"%(250, 100))
 
         #columnlabel = tk.Label(self.newprojwindow, text="Rows #", padx=padx)
         #columnlabel.grid(row=0, column=0, sticky=tk.W)
@@ -137,17 +138,30 @@ class Broccoli:
 
         label = tk.Label(self.newprojwindow, text="new project?", padx=padx) #this serves just so a empty window doesn't appear while we don't implement the "how many columns do you want, and what are their titles?"
         label.grid(row=0, column=0, sticky=tk.W)
+        
+        columnlabel = tk.Label(self.newprojwindow, text="Columns #", padx=padx)
+        columnlabel.grid(row=1, column=0, sticky=tk.W)
+        self.columnspinbox = tk.Spinbox(self.newprojwindow, from_=1, to_=maxcolumns, state="readonly", command=self.getcolumnnames)
+        self.columnspinbox.grid(row=1, column=1, sticky=tk.W)
 
         confirm_button = tk.Button(self.newprojwindow, text="Confirm", command = lambda: self.newproject())
-        confirm_button.grid(row=5, column=0)
+        confirm_button.grid(row=maxcolumns+1, column=0)
         cancel_button = tk.Button(self.newprojwindow, text="Cancel", command = lambda: self.newprojwindow.destroy())
-        cancel_button.grid(row=5, column=1)
+        cancel_button.grid(row=maxcolumns+1, column=1)
 
         #Root Window draw
         self.newproject_holder = []
         self.newproject_holder.append(self.newprojwindow)
         self.newprojwindow.update()
         self.newprojwindow.mainloop()
+
+    def getcolumnnames(self):
+        for i in self.columnspinbox.get():
+            columnlabel = tk.Label(self.newprojwindow, text="test1")
+            columnlabel.grid(row=i, column=0, sticky=tk.W)
+            columnentry = tk.Entry(self.newprojwindow)
+            columnentry.grid(row=i, column=1, sticky=tk.W)
+            self.newprojwindow.update()
 
 
     def createtable(self, tablename="New Table", columns=3, titles=["#", "text", "category"]):
@@ -163,6 +177,7 @@ class Broccoli:
         table._change_index(len(self.phrasesdb) + 1)
         self.tables.append(table)
         table.columns = columns
+        table.titles = titles
 
         table.bottom_cells[0]._bottom_entry.bind("<Return>", lambda event: table.bottom_cells[1]._bottom_entry.focus_set())
         table.bottom_cells[1]._bottom_entry.bind("<Return>", lambda event: self.addline(table))
@@ -358,7 +373,7 @@ class Broccoli:
         if f == '':
            return
 
-        self.db.export(self.phrasesdb, f)
+        self.db.export(self.phrasesdb, f) #will need to include a table.titles once i get it working properly
 
         self.updatestatusprocess("")
 
