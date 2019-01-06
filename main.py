@@ -123,28 +123,20 @@ class Broccoli:
 
         self.newprojwindow = tk.Tk()
         self.newprojwindow.resizable(width=tk.FALSE, height=tk.FALSE)
+        self.newprojwindow.title("New Project?")
         self.newprojwindow.geometry("%sx%s"%(250, 100))
 
-        #columnlabel = tk.Label(self.newprojwindow, text="Rows #", padx=padx)
-        #columnlabel.grid(row=0, column=0, sticky=tk.W)
-        #self.rowcount = tk.Entry(self.newprojwindow, width = 5)
-        #self.rowcount.grid(row=0, column=1, sticky=tk.W)
-        #columnnamelabel = tk.Label(self.newprojwindow, text="Column", padx=padx)
-        #columnnamelabel.grid(row=1, column=0, sticky=tk.W)
-        #self.columnname = tk.ttk.Combobox(self.newprojwindow, width = 15)
-        #self.columnname["values"] = ["Text", "Category"]
-        #self.columnname.set("Text")
-        #self.columnname.grid(row=1, column=1, sticky=tk.W)
-
-        label = tk.Label(self.newprojwindow, text="new project?", padx=padx) #this serves just so a empty window doesn't appear while we don't implement the "how many columns do you want, and what are their titles?"
-        label.grid(row=0, column=0, sticky=tk.W)
+        tablelabel = tk.Label(self.newprojwindow, text="Table name: ", padx=padx)
+        tablelabel.grid(row=0, column=0, sticky=tk.W)
+        tableentry = tk.Entry(self.newprojwindow)
+        tableentry.grid(row=0, column=1, sticky=tk.W)
         
-        columnlabel = tk.Label(self.newprojwindow, text="Columns #", padx=padx)
+        columnlabel = tk.Label(self.newprojwindow, text="Columns #: ", padx=padx)
         columnlabel.grid(row=1, column=0, sticky=tk.W)
         self.columnspinbox = tk.Spinbox(self.newprojwindow, from_=1, to_=maxcolumns, state="readonly", command=self.getcolumnnames)
         self.columnspinbox.grid(row=1, column=1, sticky=tk.W)
 
-        confirm_button = tk.Button(self.newprojwindow, text="Confirm", command = lambda: self.newproject())
+        confirm_button = tk.Button(self.newprojwindow, text="Confirm", command = lambda: self.newproject(tableentry.get() if tableentry.get() is not "" else "New Table"))
         confirm_button.grid(row=maxcolumns+1, column=0)
         cancel_button = tk.Button(self.newprojwindow, text="Cancel", command = lambda: self.newprojwindow.destroy())
         cancel_button.grid(row=maxcolumns+1, column=1)
@@ -157,7 +149,7 @@ class Broccoli:
 
     def getcolumnnames(self):
         for i in self.columnspinbox.get():
-            columnlabel = tk.Label(self.newprojwindow, text="test1")
+            columnlabel = tk.Label(self.newprojwindow, text="Column %d: "%(i))
             columnlabel.grid(row=i, column=0, sticky=tk.W)
             columnentry = tk.Entry(self.newprojwindow)
             columnentry.grid(row=i, column=1, sticky=tk.W)
