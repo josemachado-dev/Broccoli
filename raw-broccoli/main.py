@@ -141,7 +141,7 @@ class Broccoli:
         cancel_button = tk.Button(self.newprojwindow, text="Cancel", command = lambda: self.newprojwindow.destroy())
         cancel_button.grid(row=maxcolumns+1, column=1)
 
-        #Root Window draw
+        #Window draw
         self.newproject_holder = []
         self.newproject_holder.append(self.newprojwindow)
         self.newprojwindow.update()
@@ -170,6 +170,9 @@ class Broccoli:
         self.tables.append(table)
         table.columns = columns
         table.titles = titles
+
+        tablenameobj = {"Table": tablename}
+        self.phrasesdb.append(tablenameobj)
 
         table.bottom_cells[0]._bottom_entry.bind("<Return>", lambda event: table.bottom_cells[1]._bottom_entry.focus_set())
         table.bottom_cells[1]._bottom_entry.bind("<Return>", lambda event: self.addline(table))
@@ -259,6 +262,7 @@ class Broccoli:
         self.rootwindow.update()
 
         self.createtable()
+        #self.createtable(self.phrasesdb[0]["Table"])
 
         with open(f if f is not None else self.db.currentfilename, "r") as file:
             data = json.load(file)
