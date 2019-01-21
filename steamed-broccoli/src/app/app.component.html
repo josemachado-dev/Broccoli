@@ -1,0 +1,26 @@
+{{title}}
+
+<button (click)="addRow()">Add data</button>
+<table>
+  <thead>
+    <th>#</th>
+    <th
+      *ngFor="let column of columns; let index = index; trackBy: trackByIndex;"
+      (click)="editColumnTitle(index, $event)"
+      class="column-title"
+    >
+      <input [hidden]="editColumnTitleIndex != index" [(ngModel)]="columns[index]">
+      <span [hidden]="editColumnTitleIndex == index">{{columns[index]}}</span>
+    </th>
+    <th><button (click)="addColumn()">+</button></th>
+  </thead>
+  <tr 
+    *ngFor="let row of rows; let rowIndex = index; trackBy: trackByIndex"
+  >
+    <td>{{rowIndex+1}}</td>
+    <td *ngFor="let item of row.data; let dataIndex = index; trackBy: trackByIndex">
+      <input [(ngModel)]="rows[rowIndex][dataIndex]">
+    </td>
+    <td><button (click)="removeRow(rowIndex)">X</button></td>
+  </tr>
+</table>
