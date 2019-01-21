@@ -2,6 +2,7 @@
 .vscode/*
 __pycache__/*
 raw-broccoli/save_files/*
+raw-broccoli/* #Removing the Python iteration of improved-broccoli, so as to not cause confusion on potential users
 
 #File types
 
