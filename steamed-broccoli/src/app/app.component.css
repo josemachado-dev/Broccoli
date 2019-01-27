@@ -1,6 +1,17 @@
+th {
+    background-color: rgb(40, 250, 40)
+}
+
 tr {
-    background-color: #fefefe;
+    background-color: rgb(255, 255, 255);
+}
+tr:nth-child(even) {
+    background-color: rgb(225, 225, 225);
 }
 tr:hover {
-    background-color: red;
+    background-color: rgba(200, 200, 200);
+}
+
+input:focus {
+    border: 2px solid rgb(50, 50, 50);
 }

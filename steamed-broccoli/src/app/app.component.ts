@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { saveAs } from 'file-saver';
 
 
 class Row {
   data : string[]
 
   constructor(columns : any[]) {
-    this.data = columns.map((column) => "-");
+    this.data = columns.map((column) => "");
   }
 }
 
@@ -14,6 +15,7 @@ class Row {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
   constructor() {
     document
@@ -28,6 +30,7 @@ export class AppComponent {
 
   columns : string[] = [];
   rows : Row[] = [];
+
 
   editColumnTitleIndex = -1;
 
@@ -51,5 +54,37 @@ export class AppComponent {
 
   removeRow(i : number) {
     this.rows.splice(i,1);
+  }
+
+  saveTable(){
+    let a = this.parajson();
+    console.log("??")
+    console.warn(a);
+    var file = new Blob([this.parajson()], {type: "application/json;charset=utf-8"});
+    saveAs(file, "stemed-broccoli_save.json");
+  }
+
+  debugArrays(){
+    console.log(this.columns)
+    console.log(this.rows)
+  }
+
+  trackByIndex(col, row = undefined) {
+    return () => { return `c_${col}-r_${row}` }
+  }
+
+  parajson() {
+    console.log("sdasf");
+    let j = ""
+    for (let row of this.rows) {
+      j += "{ "
+      this.columns.map((title, index) => {
+        console.log("dsjfhsd")
+        return `${title}: ${row.data[index]},`
+      })
+      j += "},"
+    }
+    console.log(j)
+    return j;
   }
 }
