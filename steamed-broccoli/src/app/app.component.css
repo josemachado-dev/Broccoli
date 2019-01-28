@@ -1,12 +1,13 @@
 th {
-    background-color: rgb(40, 250, 40)
+    background-color: rgb(40, 250, 40);
+    padding: 0.5em;
 }
 
 tr {
     background-color: rgb(255, 255, 255);
 }
 tr:nth-child(even) {
-    background-color: rgb(225, 225, 225);
+    background-color: rgb(150, 150, 150);
 }
 tr:hover {
     background-color: rgba(200, 200, 200);
@@ -14,4 +15,8 @@ tr:hover {
 
 input:focus {
     border: 2px solid rgb(50, 50, 50);
+}
+
+button {
+    text-align: center;
 }

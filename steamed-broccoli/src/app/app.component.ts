@@ -57,10 +57,10 @@ export class AppComponent {
   }
 
   saveTable(){
-    let a = this.parajson();
+    let a = this.goingToJSON();
     console.log("??")
     console.warn(a);
-    var file = new Blob([this.parajson()], {type: "application/json;charset=utf-8"});
+    var file = new Blob([this.goingToJSON()], {type: "application/json;charset=utf-8"});
     saveAs(file, "stemed-broccoli_save.json");
   }
 
@@ -73,7 +73,7 @@ export class AppComponent {
     return () => { return `c_${col}-r_${row}` }
   }
 
-  parajson() {
+  goingToJSON() {
     console.log("sdasf");
     let j = ""
     for (let row of this.rows) {
