@@ -1,10 +1,6 @@
 #Folders
 .vscode/*
 __pycache__/*
-raw-broccoli/*
-#Removing the Python iteration of improved-broccoli, so as to not cause confusion on potential users
 
-#File types
-
-
-#Files
+#Dependencies
+/node_modules
