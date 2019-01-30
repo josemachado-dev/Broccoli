@@ -74,17 +74,17 @@ export class AppComponent {
   }
 
   goingToJSON() {
-    console.log("sdasf");
     let j = ""
-    for (let row of this.rows) {
-      j += "{ "
-      this.columns.map((title, index) => {
-        console.log("dsjfhsd")
-        return `${title}: ${row.data[index]},`
-      })
-      j += "},"
-    }
-    console.log(j)
+
+    this.rows.forEach((row, rowIndex, rows) => {
+        j += "[{ "
+        this.columns.map((column, columnIndex, columns) => {
+            j += `"${column}": "${row.data[columnIndex]}"${columnIndex + 1 == columns.length ? '': ','}`
+        })
+        j += ` }${rowIndex + 1 == this.columns.length ? '' : ','}`
+    });
+
+    j += "]"
     return j;
   }
 }
