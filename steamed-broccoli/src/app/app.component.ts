@@ -26,8 +26,6 @@ export class AppComponent {
     )
   }
   
-  title = 'steamed-broccoli';
-
   columns : string[] = [];
   rows : Row[] = [];
 
@@ -64,27 +62,22 @@ export class AppComponent {
     saveAs(file, "stemed-broccoli_save.json");
   }
 
-  debugArrays(){
-    console.log(this.columns)
-    console.log(this.rows)
-  }
-
   trackByIndex(col, row = undefined) {
     return () => { return `c_${col}-r_${row}` }
   }
 
   goingToJSON() {
-    let j = ""
+    let j = "[\n"
 
     this.rows.forEach((row, rowIndex, rows) => {
-        j += "[{ "
+        j += "\t{ "
         this.columns.map((column, columnIndex, columns) => {
             j += `"${column}": "${row.data[columnIndex]}"${columnIndex + 1 == columns.length ? '': ','}`
         })
-        j += ` }${rowIndex + 1 == this.columns.length ? '' : ','}`
+        j += ` }${rowIndex + 1 == this.columns.length ? '' : ',\n'}`
     });
 
-    j += "]"
+    j += "\n]"
     return j;
   }
 }
