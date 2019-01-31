@@ -55,29 +55,24 @@ export class AppComponent {
   }
 
   saveTable(){
-    let a = this.goingToJSON();
-    console.log("??")
-    console.warn(a);
-    var file = new Blob([this.goingToJSON()], {type: "application/json;charset=utf-8"});
-    saveAs(file, "stemed-broccoli_save.json");
+    let fileToPackt = "[\n"
+
+    this.rows.forEach((row, rowIndex, rows) => {
+        fileToPackt += "\t{ "
+        this.columns.map((column, columnIndex, columns) => {
+            fileToPackt += `"${column}": "${row.data[columnIndex]}"${columnIndex + 1 == columns.length ? '': ','}`
+        })
+        fileToPackt += ` }${rowIndex + 1 == this.columns.length ? '' : ',\n'}`
+    });
+
+    fileToPackt += "\n]"
+
+    var fileToDownload = new Blob([fileToPackt], {type: "application/json;charset=utf-8"});
+    saveAs(fileToDownload, "stemed-broccoli_save.json");
   }
 
   trackByIndex(col, row = undefined) {
     return () => { return `c_${col}-r_${row}` }
   }
 
-  goingToJSON() {
-    let j = "[\n"
-
-    this.rows.forEach((row, rowIndex, rows) => {
-        j += "\t{ "
-        this.columns.map((column, columnIndex, columns) => {
-            j += `"${column}": "${row.data[columnIndex]}"${columnIndex + 1 == columns.length ? '': ','}`
-        })
-        j += ` }${rowIndex + 1 == this.columns.length ? '' : ',\n'}`
-    });
-
-    j += "\n]"
-    return j;
-  }
 }
