@@ -1,0 +1,8 @@
+<div>
+    Language
+    <select>
+      <option *ngFor="let lang of languages" [value]="lang.id">
+        {(lang.name)}
+      </option>
+    </select>
+  </div>
