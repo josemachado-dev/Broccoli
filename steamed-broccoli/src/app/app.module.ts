@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { UserPreferencesComponent } from './user-preferences/user-preferences.component';
+import { TableComponent } from './table/table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserPreferencesComponent
+    UserPreferencesComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule, FormsModule, CommonModule

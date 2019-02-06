@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 
+class Languages {
+  public id: string;
+  public name: string;
+}
+
 @Component({
   selector: 'app-user-preferences',
   templateUrl: './user-preferences.component.html',
   styleUrls: ['./user-preferences.component.css']
 })
 
-//export class Languages {
-//  public id: string;
-//  public name: string;
-//}
-
-
 export class UserPreferencesComponent implements OnInit {
 
   constructor() { }
 
-  languages: any[];
+  languages: Languages[];
 
   ngOnInit() {
     this.languages=[
