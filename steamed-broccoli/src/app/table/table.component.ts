@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
+import { stringify } from '@angular/compiler/src/util';
 
 class Row {
   data : string[]
@@ -28,8 +29,9 @@ export class TableComponent {
   columns : string[] = [];
   rows : Row[] = [];
 
-
   editColumnTitleIndex = -1;
+
+  selectedFile = null;
 
   editColumnTitle(index, event) {
     event.stopImmediatePropagation();
@@ -68,6 +70,23 @@ export class TableComponent {
 
     var fileToDownload = new Blob([fileToPackt], {type: "application/json;charset=utf-8"});
     saveAs(fileToDownload, "SB_save.json");
+  }
+
+  onFileSelected(event){
+    this.selectedFile = event.target.files[0];
+  }
+
+  openTable(){
+    if(this.selectedFile != null){
+      const blob = new Blob([JSON.stringify(this.selectedFile)], {type:"application/json"});
+      let fr = new FileReader();
+
+      fr.addEventListener("load", e =>{
+        console.log(e.target.result, JSON.parse(fr.result))
+      });
+  
+      fr.readAsText(blob);
+    }
   }
 
   trackByIndex(col, row = undefined) {

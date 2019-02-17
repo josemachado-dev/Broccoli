@@ -1,4 +1,14 @@
 <div>
+  <input
+    type="file"
+    (change)="onFileSelected($event)">
+  <button
+    type="button"
+    (click)="openTable()"
+  >Open table</button>
+</div>
+
+<div>
   <button 
     type="button" 
     (click)="addRow()"
