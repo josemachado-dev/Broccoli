@@ -78,14 +78,13 @@ export class TableComponent {
 
   openTable(){
     if(this.selectedFile != null){
-      const blob = new Blob([JSON.stringify(this.selectedFile)], {type:"application/json"});
       let fr = new FileReader();
 
-      fr.addEventListener("load", e =>{
-        console.log(e.target.result, JSON.parse(fr.result))
-      });
+      fr.onload = (e : any) => {
+        console.log(JSON.parse(e.target.result))
+      };
   
-      fr.readAsText(blob);
+      fr.readAsText(this.selectedFile);
     }
   }
 
