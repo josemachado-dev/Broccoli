@@ -32,6 +32,8 @@ export class TableComponent {
   editColumnTitleIndex = -1;
 
   selectedFile = null;
+  
+  spellcheckActive = true;
 
   editColumnTitle(index, event) {
     event.stopImmediatePropagation();
@@ -45,6 +47,10 @@ export class TableComponent {
         row.data.push("0")
       }
     })
+  }
+
+  removeColumn() {
+    console.error("Needs to be implemented")
   }
 
   addRow() {

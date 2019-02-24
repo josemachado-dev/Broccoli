@@ -1,28 +1,32 @@
 <div>
+
   <input
     type="file"
     (change)="onFileSelected($event)">
+
   <button
     type="button"
     (click)="openTable()"
   >Open table</button>
-</div>
 
-<div>
-  <button 
-    type="button" 
-    (click)="addRow()"
-  >Add data</button>
+  <br><br>
+
   <button 
     type="button"
     (click)="saveTable()"
   >Save table</button>
+
 </div>
 
+<br>
+
 <div>
+
   <table>
     <thead>
+
       <th>#</th>
+
       <th
         *ngFor="let column of columns; let index = index; trackBy: trackByIndex('title', index)"
         (click)="editColumnTitle(index, $event)"
@@ -31,26 +35,49 @@
         <input
           [hidden]="editColumnTitleIndex != index"
           [(ngModel)]="columns[index]"
+          [attr.spellcheck]="spellcheckActive"
         >
-        <span [hidden]="editColumnTitleIndex == index">{{columns[index]}}</span>
+        <span
+          [hidden]="editColumnTitleIndex == index"
+        >{{columns[index]}}</span>
       </th>
-      <th><button
-        type="button"
-        (click)="addColumn()">+</button></th>
+
+      <th>
+        <button
+          type="button"
+          (click)="addColumn()"
+        >Add column</button>
+      </th>
+
     </thead>
+
     <tr 
       *ngFor="let row of rows; let rowIndex = index; trackBy: trackByIndex(rowIndex, 'data')"
     >
       <td>{{rowIndex+1}}</td>
-      <td *ngFor="let item of row.data; let dataIndex = index; trackBy: trackByIndex(rowIndex, dataIndex)">
-        <input 
-          [(ngModel)]="rows[rowIndex].data[dataIndex]"
-        >
+
+      <td
+        *ngFor="let item of row.data; let dataIndex = index; trackBy: trackByIndex(rowIndex, dataIndex)">
+          <input 
+            [(ngModel)]="rows[rowIndex].data[dataIndex]"
+            [attr.spellcheck]="spellcheckActive"
+          >
       </td>
-      <td><button
-        type="button"
-        (click)="removeRow(rowIndex)"
-      >X</button></td>
+
+      <td>
+        <button
+          type="button"
+          (click)="removeRow(rowIndex)"
+        >X</button>
+      </td>
+
     </tr>
+
   </table>
+
+  <button 
+    type="button" 
+    (click)="addRow()"
+  >Add line</button>
+
 </div>
