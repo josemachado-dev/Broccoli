@@ -28,6 +28,7 @@ export class TableComponent {
   
   columns : string[] = [];
   rows : Row[] = [];
+  firstRowOrColumn = true;
 
   editColumnTitleIndex = -1;
 
@@ -35,16 +36,22 @@ export class TableComponent {
   
   spellcheckActive = true;
 
+
   editColumnTitle(index, event) {
     event.stopImmediatePropagation();
     this.editColumnTitleIndex = index;
   }
 
   addColumn() {
-    this.columns.push("hello");
+    if(this.rows.length == 0 && this.firstRowOrColumn){
+      this.firstRowOrColumn = false;
+      this.addRow();
+    }
+
+    this.columns.push("Column Title");
     let a = this.rows.map((row) => {
       for (let i = row.data.length; i < this.columns.length; ++i) {
-        row.data.push("0")
+        row.data.push("")
       }
     })
   }
@@ -54,6 +61,11 @@ export class TableComponent {
   }
 
   addRow() {
+    if(this.columns.length == 0 && this.firstRowOrColumn){
+      this.firstRowOrColumn = false;
+      this.addColumn();
+    }
+
     this.rows.push(new Row(this.columns));
   }
 
