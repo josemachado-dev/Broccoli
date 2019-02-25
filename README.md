@@ -1,5 +1,6 @@
-# improved-broccoli
-improved-broccoli aims to be a tool that serves as a bridge between game writers and game programmers
+# Broccoli
+
+Broccoli aims to be a tool that serves as a bridge between game writers and game programmers
 
 ![ReadMe Diagram](img/README_Diagram.png)
 
@@ -16,4 +17,4 @@ Besides, the hability of the game writers to categorize each item of text will m
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
-This project is licensed under the  LGPL-3.0 License - see the [LICENSE.md](LICENSE) file for details
+This project is licensed under the  LGPL-3.0 License - see the [LICENSE](LICENSE) file for details
