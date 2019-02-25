@@ -8,3 +8,12 @@ The game writers will use the software, writing their item descriptions (or dial
 This will make it so that it's not necessarry to hardcode each line of text in the game engine's scripts, nor to spend team time  converting the text from the game writers to a format that can be used in a game engine.
 
 Besides, the hability of the game writers to categorize each item of text will make it easier for the programmers to understand where each text should be applied.
+
+<hr>
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## License
+This project is licensed under the  LGPL-3.0 License - see the [LICENSE.md](LICENSE.md) file for details
