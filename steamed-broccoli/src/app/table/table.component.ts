@@ -58,8 +58,11 @@ export class TableComponent {
     })
   }
 
-  removeColumn() {
-    console.error("Needs to be implemented")
+  removeColumn(i : number) {
+    this.columns.splice(i,1);
+    for(var j = 0; j < this.rows.length; j++){
+      this.rows[j].data.splice(i,1);
+    }
   }
 
   addRow() {
@@ -84,6 +87,12 @@ export class TableComponent {
             fileToPackt += `"${column}": "${row.data[columnIndex]}"${columnIndex + 1 == columns.length ? '': ','}`
         })
         fileToPackt += ` }${rowIndex + 1 == this.columns.length ? '' : ',\n'}`
+        //There is a weird bug happening where
+        //there is an extra ',\n'
+        //if there is an odd number of lines with a even number of rows
+        //and maybe or if you have an even number of lines with an odd number of rows
+
+        //need to fix ASAP
     });
 
     fileToPackt += "\n]"

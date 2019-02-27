@@ -46,6 +46,11 @@
         <span
           [hidden]="editColumnTitleIndex == index"
         >{{columns[index]}}</span>
+
+        <button
+          type="button"
+          (click)="removeColumn(index)"
+        >X</button>
       </th>
 
       <th>
