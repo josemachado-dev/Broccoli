@@ -25,6 +25,8 @@ export class TableComponent {
       }
     )
   }
+
+  tableName : string = "";
   
   columns : string[] = [];
   rows : Row[] = [];
@@ -87,7 +89,11 @@ export class TableComponent {
     fileToPackt += "\n]"
 
     var fileToDownload = new Blob([fileToPackt], {type: "application/json;charset=utf-8"});
-    saveAs(fileToDownload, "SB_save.json");
+    if(this.tableName != ""){
+      saveAs(fileToDownload, this.tableName+".json");
+    }else{
+      saveAs(fileToDownload, "SB_NewTable.json");
+    }
   }
 
   onFileSelected(event){
