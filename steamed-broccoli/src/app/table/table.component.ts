@@ -63,6 +63,11 @@ export class TableComponent {
     for(var j = 0; j < this.rows.length; j++){
       this.rows[j].data.splice(i,1);
     }
+
+    if(this.columns.length == 0){
+      this.rows.splice(0, this.rows.length);
+      this.firstRowOrColumn = true;
+    }
   }
 
   addRow() {
