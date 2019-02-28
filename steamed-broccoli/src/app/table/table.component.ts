@@ -24,6 +24,9 @@ export class TableComponent {
         this.editColumnTitleIndex = -1;
       }
     )
+
+    //Table starts with 1 column and 1 row
+    this.addColumn();
   }
 
   tableName : string = "";
@@ -103,6 +106,7 @@ export class TableComponent {
     fileToPackt += "\n]"
 
     var fileToDownload = new Blob([fileToPackt], {type: "application/json;charset=utf-8"});
+    
     if(this.tableName != ""){
       saveAs(fileToDownload, this.tableName+".json");
     }else{
