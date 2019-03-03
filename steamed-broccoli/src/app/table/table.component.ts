@@ -123,7 +123,19 @@ export class TableComponent {
       let fr = new FileReader();
 
       fr.onload = (e : any) => {
-        console.log(JSON.parse(e.target.result))
+        let loadedFile = JSON.parse(e.target.result);
+
+        if(loadedFile.length != 0){
+
+          this.columns = [];
+
+          for(let i = 0; i < loadedFile.length; i++){
+            this.columns.push(...Object.keys(loadedFile[i]));
+          }
+
+        }else{
+          window.alert("File is empty.");
+        }
       };
   
       fr.readAsText(this.selectedFile);
