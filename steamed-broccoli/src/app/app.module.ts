@@ -6,12 +6,14 @@ import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { UserPreferencesComponent } from './user-preferences/user-preferences.component';
 import { TableComponent } from './table/table.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserPreferencesComponent,
-    TableComponent
+    TableComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule, FormsModule, CommonModule
