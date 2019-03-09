@@ -139,6 +139,10 @@ export class TableComponent {
       };
   
       fr.readAsText(this.selectedFile);
+
+      //This makes it so the table name is the same as the uploaded file name, minus the ".json"
+      let str = this.selectedFile.name;
+      this.tableName = str.substring( 0, str.length - 5);
     }
   }
 
