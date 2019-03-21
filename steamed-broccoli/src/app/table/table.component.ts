@@ -101,6 +101,8 @@ export class TableComponent {
         //and maybe or if you have an even number of lines with an odd number of rows
 
         //need to fix ASAP
+
+        //also, if the string ends in a '\' it will mess up, because the end of the string will read \", making it not a " to close the string
     });
 
     fileToPackt += "\n]"
@@ -130,12 +132,12 @@ export class TableComponent {
           this.columns = [];
 
           for(let i = 0; i < loadedFile.length; i++){
+            //Gets columns titles
             this.columns.push(...Object.keys(loadedFile[i]));
           }
 
           //This makes it so the table name is the same as the uploaded file name, minus the ".json"
-          let str = this.selectedFile.name;
-          this.tableName = str.substring( 0, str.length - 5);
+          this.tableName = this.selectedFile.name.substring( 0, this.selectedFile.name.length - 5);
         }else{
           window.alert("File is empty.");
         }
