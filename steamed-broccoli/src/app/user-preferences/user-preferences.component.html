@@ -1,8 +1,25 @@
 <div>
-    Language
-    <select>
-      <option *ngFor="let lang of languages"  [ngValue]="lang.id">
-        {{lang.name}}
-      </option>
-    </select>
-  </div>
+  Spell Checker
+  <select>
+    <option
+      value="true"
+    >On</option>
+    <option
+      value="false"
+    >Off</option>
+  </select>
+
+  <br>
+
+  Language
+  <select>
+    <option 
+      *ngFor="let lang of languages"
+      [ngValue]="lang.id"
+    >{{lang.name}}
+    </option>
+  </select>
+
+  <br>
+
+</div>

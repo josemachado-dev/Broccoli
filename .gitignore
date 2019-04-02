@@ -1,6 +1,2 @@
 #Folders
 .vscode/*
-__pycache__/*
-
-#Dependencies
-/node_modules
