@@ -26,7 +26,7 @@ export class TableComponent {
     )
 
     //Table starts with 1 column and 1 row
-    this.addColumn();
+    this.addColumn(null);
   }
 
   tableName : string = "";
@@ -47,13 +47,18 @@ export class TableComponent {
     this.editColumnTitleIndex = index;
   }
 
-  addColumn() {
+  addColumn(columnName : string) {
     if(this.rows.length == 0 && this.firstRowOrColumn){
       this.firstRowOrColumn = false;
       this.addRow();
     }
 
-    this.columns.push("Column Title");
+    if(columnName == "" || columnName == null){
+      this.columns.push("Column Title");
+    }else{
+      this.columns.push(columnName)
+    }
+
     let a = this.rows.map((row) => {
       for (let i = row.data.length; i < this.columns.length; ++i) {
         row.data.push("")
@@ -76,7 +81,7 @@ export class TableComponent {
   addRow() {
     if(this.columns.length == 0 && this.firstRowOrColumn){
       this.firstRowOrColumn = false;
-      this.addColumn();
+      this.addColumn(null);
     }
 
     this.rows.push(new Row(this.columns));
@@ -145,6 +150,16 @@ export class TableComponent {
   
       fr.readAsText(this.selectedFile);
     }
+  }
+
+  openTemplate(){
+    this.columns = [];
+    this.rows = [];
+
+    this.addColumn("Character");
+    this.addColumn("Line")
+
+    this.addRow();
   }
 
   trackByIndex(col, row = undefined) {
