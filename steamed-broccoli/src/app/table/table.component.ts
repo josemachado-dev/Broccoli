@@ -26,7 +26,7 @@ export class TableComponent {
     )
 
     //Table starts with 1 column and 1 row
-    this.addColumn(null);
+    this.addColumn();
   }
 
   tableName : string = "";
@@ -47,17 +47,13 @@ export class TableComponent {
     this.editColumnTitleIndex = index;
   }
 
-  addColumn(columnName : string) {
+  addColumn(columnTitle : string = "Column Title") {
     if(this.rows.length == 0 && this.firstRowOrColumn){
       this.firstRowOrColumn = false;
       this.addRow();
     }
 
-    if(columnName == "" || columnName == null){
-      this.columns.push("Column Title");
-    }else{
-      this.columns.push(columnName)
-    }
+    this.columns.push(columnTitle)
 
     let a = this.rows.map((row) => {
       for (let i = row.data.length; i < this.columns.length; ++i) {
@@ -81,7 +77,7 @@ export class TableComponent {
   addRow() {
     if(this.columns.length == 0 && this.firstRowOrColumn){
       this.firstRowOrColumn = false;
-      this.addColumn(null);
+      this.addColumn();
     }
 
     this.rows.push(new Row(this.columns));
