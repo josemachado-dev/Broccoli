@@ -88,27 +88,12 @@ export class TableComponent {
   }
 
   saveTable(){
-    let fileToPackt = "[\n"
+    let columns = this.columns;
+    let rows = this.rows;
 
-    this.rows.forEach((row, rowIndex, rows) => {
-        fileToPackt += "\t{ "
-        this.columns.map((column, columnIndex, columns) => {
-            fileToPackt += `"${column}": "${row.data[columnIndex]}"${columnIndex + 1 == columns.length ? '': ','}`
-        })
-        fileToPackt += ` }${rowIndex + 1 == this.columns.length ? '' : ',\n'}`
-        //There is a weird bug happening where
-        //there is an extra ',\n'
-        //if there is an odd number of lines with a even number of rows
-        //and maybe or if you have an even number of lines with an odd number of rows
+    var fileContent = JSON.stringify( { columns, rows } );
 
-        //need to fix ASAP
-
-        //also, if the string ends in a '\' it will mess up, because the end of the string will read \", making it not a " to close the string
-    });
-
-    fileToPackt += "\n]"
-
-    var fileToDownload = new Blob([fileToPackt], {type: "application/json;charset=utf-8"});
+    var fileToDownload = new Blob([fileContent], {type: "application/json;charset=utf-8"});
     
     if(this.tableName != ""){
       saveAs(fileToDownload, this.tableName+".json");
@@ -128,20 +113,8 @@ export class TableComponent {
       fr.onload = (e : any) => {
         let loadedFile = JSON.parse(e.target.result);
 
-        if(loadedFile.length != 0){
-
-          this.columns = [];
-
-          for(let i = 0; i < loadedFile.length; i++){
-            //Gets columns titles
-            this.columns.push(...Object.keys(loadedFile[i]));
-          }
-
-          //This makes it so the table name is the same as the uploaded file name, minus the ".json"
-          this.tableName = this.selectedFile.name.substring( 0, this.selectedFile.name.length - 5);
-        }else{
-          window.alert("File is empty.");
-        }
+        this.columns = loadedFile.columns;
+        this.rows = loadedFile.rows;
       };
   
       fr.readAsText(this.selectedFile);
