@@ -115,13 +115,17 @@ export class TableComponent {
 
         this.columns = loadedFile.columns;
         this.rows = loadedFile.rows;
+        
+        //Table name = uploaded file name, minus the ".json"
+        this.tableName = this.selectedFile.name.substring( 0, this.selectedFile.name.length - 5);
       };
   
       fr.readAsText(this.selectedFile);
     }
   }
 
-  openTemplate(){
+  testTemplate(){
+    //test for the implementation of Templates
     this.columns = [];
     this.rows = [];
 

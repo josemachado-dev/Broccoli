@@ -20,13 +20,12 @@
 </div>
 
 <br>
-<br>
 
 <div>
   <button
     type="button"
-    (click)="openTemplate()"
-  >Open Template</button>
+   (click)="testTemplate()"
+  >Test Template</button>
 </div>
 
 <br>
@@ -45,7 +44,9 @@
       <th>#</th>
 
       <th
-        *ngFor="let column of columns; let index = index; trackBy: trackByIndex('title', index)"
+        *ngFor="let column of columns;
+        let index = index;
+        trackBy: trackByIndex('title', index)"
         (click)="editColumnTitle(index, $event)"
         class="column-title"
       >
@@ -74,12 +75,17 @@
     </thead>
 
     <tr 
-      *ngFor="let row of rows; let rowIndex = index; trackBy: trackByIndex(rowIndex, 'data')"
+      *ngFor="let row of rows;
+      let rowIndex = index;
+      trackBy: trackByIndex(rowIndex, 'data')"
     >
       <td>{{rowIndex+1}}</td>
 
       <td
-        *ngFor="let item of row.data; let dataIndex = index; trackBy: trackByIndex(rowIndex, dataIndex)">
+        *ngFor="let item of row.data;
+        let dataIndex = index;
+        trackBy: trackByIndex(rowIndex, dataIndex)"
+        >
           <input 
             [(ngModel)]="rows[rowIndex].data[dataIndex]"
             [attr.spellcheck]="spellcheckActive"
