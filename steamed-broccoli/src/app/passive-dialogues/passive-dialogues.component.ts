@@ -13,5 +13,6 @@ export class PassiveDialoguesComponent implements OnInit {
   }
 
   scriptName : string = ""
+  spellcheckActive : Boolean = JSON.parse(localStorage.getItem("spellchecker"));
 
 }

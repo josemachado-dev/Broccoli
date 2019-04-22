@@ -29,6 +29,7 @@ export class TableComponent {
     this.addColumn();
   }
 
+
   tableName : string = "";
   
   columns : string[] = [];
@@ -38,8 +39,8 @@ export class TableComponent {
   editColumnTitleIndex = -1;
 
   selectedFile = null;
-  
-  spellcheckActive = true;
+
+  spellcheckActive : Boolean = JSON.parse(localStorage.getItem("spellchecker"));
 
 
   editColumnTitle(index, event) {
