@@ -1,8 +1,26 @@
+<div>
+
+  <input
+    type="file"
+    (change)="onFileSelected($event)">
+
+  <button
+    type="button"
+    (click)="openScript()"
+  >Open Script</button>
+
+  <br>
+
+  <button 
+    type="button"
+    (click)="saveScript()"
+  >Save Script</button>
+
+</div>
+
 <br>
 
-<div
-  class="fullWidth"
-  >
+<div>
 
   Script:
   <input
@@ -16,5 +34,6 @@
     placeholder="This is where you'll (eventually) write your script!"
     rows=25
     [attr.spellcheck]="spellcheckActive"
+    [(ngModel)]="textareaText"
     ></textarea>
 </div>

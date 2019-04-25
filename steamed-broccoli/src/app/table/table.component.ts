@@ -99,7 +99,7 @@ export class TableComponent {
     if(this.tableName != ""){
       saveAs(fileToDownload, this.tableName+".json");
     }else{
-      saveAs(fileToDownload, "SB_NewTable.json");
+      saveAs(fileToDownload, "Broccoli_NewTable.json");
     }
   }
 
