@@ -12,6 +12,29 @@ Besides, the hability of the game writers to categorize each item of text will m
 
 <hr>
 
+## How to install Broccoli
+
+> Broccoli will eventually run on a server or site, but, for now, follow this instructions to actually use Broccoli
+
+After you've clonned this repository, make sure you have [Node.js](https://nodejs.org/en/) installed, and some sort of code editor, like [Visual Studio Code](https://code.visualstudio.com/).
+
+Then, run your terminal and navigate to the folder where you've clonned the repository, and open the "steamed-broccoli" folder
+```
+cd [Path_To_Repository]\steamed-broccoli
+```
+and then run
+```
+npm install -g @angular/cli
+npm install
+```
+<br><br>
+After that, whenever you want to run Broccoli, open a terminal, navigate to the `steamed-broccoli` folder, and run
+```
+npm serve -o
+```
+
+<hr>
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
