@@ -15,7 +15,8 @@ export class UserPreferencesComponent implements OnInit {
 
   constructor() { }
 
-  languages: Languages[];
+  languages : Languages[];
+  spellcheck : Boolean;
 
   ngOnInit() {
     this.languages=[
@@ -24,6 +25,14 @@ export class UserPreferencesComponent implements OnInit {
       {id: "fr", name: "French"},
       {id: "es", name: "Spanish"},
     ]
+
+    if(!localStorage.getItem("spellchecker")) {
+      this.saveStorage();
+    }
+  }
+
+  saveStorage(){
+    localStorage.setItem("spellchecker", JSON.stringify(this.spellcheck));
   }
 
 }

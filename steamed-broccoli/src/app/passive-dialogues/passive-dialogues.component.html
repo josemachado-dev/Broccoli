@@ -1,0 +1,40 @@
+<div>
+
+  <input
+    type="file"
+    (change)="onFileSelected($event)"
+    accept=".json">
+
+  <button
+    type="button"
+    (click)="openScript()"
+  >Open Script</button>
+
+  <br>
+
+  <button 
+    type="button"
+    (click)="saveScript()"
+  >Save Script</button>
+
+</div>
+
+<br>
+
+<div>
+
+  Script:
+  <input
+    [(ngModel)]="scriptName"
+    placeholder="Script Name"
+  >
+
+  <br>
+
+  <textarea
+    placeholder="This is where you'll (eventually) write your script!"
+    rows=25
+    [attr.spellcheck]="spellcheckActive"
+    [(ngModel)]="textareaText"
+    ></textarea>
+</div>

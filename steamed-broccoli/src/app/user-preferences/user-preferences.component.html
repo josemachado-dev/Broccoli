@@ -1,14 +1,12 @@
 <div>
-  Spell Checker
-  <select>
-    <option
-      value="true"
-    >On</option>
-    <option
-      value="false"
-    >Off</option>
-  </select>
-
+  <input
+    type="checkbox"
+    [(ngModel)]="spellcheck"
+    (change)="saveStorage()"
+    value="spell"
+    checked
+  > Spell Checker
+  
   <br>
 
   Language
