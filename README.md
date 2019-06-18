@@ -1,6 +1,6 @@
 # Broccoli
 
-Broccoli aims to be a tool that serves as a bridge between game writers and game programmers
+**Broccoli** aims to be a tool that serves as a bridge between game writers and game programmers
 
 ![ReadMe Diagram](img/README_Diagram.png)
 
@@ -12,15 +12,26 @@ Besides, the hability of the game writers to categorize each item of text will m
 
 <hr>
 
+## How to use Broccoli with your game engine?
+
+Currently, the only game engine supported is [Unity](https://unity.com/). Please take a look at our [Unity Integration folder](https://github.com/josemachado-dev/improved-broccoli/tree/master/Unity_Implementation) for a better understanding at how to use it.
+> Better documentation, soon to come!
+
+This, however, doesn't mean you can't use **Broccoli** with other game engines!
+If you find a way to extract information from .json files to other game engines, **Broccoli** will be of use to you too. It does mean, however, that you'll have to do some extra work... Sorry!
+> More game engines supported, soon to come!
+
+<hr>
+
 ## How to install Broccoli
 
-> Broccoli will eventually run on a server or site, but, for now, follow this instructions to actually use Broccoli
+> **Broccoli** will eventually run on a server or site, but, for now, follow this instructions to actually use the program
 
 After you've clonned this repository, make sure you have [Node.js](https://nodejs.org/en/) installed, and some sort of code editor, like [Visual Studio Code](https://code.visualstudio.com/).
 
-Then, run your terminal and navigate to the folder where you've clonned the repository, and open the "steamed-broccoli" folder
+Then, run your terminal and navigate to the folder where you've clonned the repository, and open the 'broccoli' folder
 ```
-cd [Path_To_Repository]\steamed-broccoli
+cd [Path_To_Repository]\broccoli
 ```
 and then run
 ```
@@ -28,7 +39,7 @@ npm install -g @angular/cli
 npm install
 ```
 <br><br>
-After that, whenever you want to run Broccoli, open a terminal, navigate to the `steamed-broccoli` folder, and run
+After that, whenever you want to run **Broccoli**, open a terminal, navigate to the `broccoli` folder, and run
 ```
 npm serve -o
 ```
@@ -37,7 +48,7 @@ npm serve -o
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
 
 ## License
 This project is licensed under the  LGPL-3.0 License - see the [LICENSE](LICENSE) file for details
