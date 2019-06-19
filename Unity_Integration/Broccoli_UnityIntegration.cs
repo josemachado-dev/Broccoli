@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-/*
-    Create a folder called 'StreamingAssets', if you don't have one already.
-    There, you should put your .json files you got from 'Broccoli'.
-
-    If you create subfolders on the StreamingAssets folder, take that into consideration when you're defining the 'filePath'
-*/
-
 [System.Serializable]
 public class Data {
     public List<string> columns;

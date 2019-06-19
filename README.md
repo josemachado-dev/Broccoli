@@ -12,10 +12,16 @@ Besides, the hability of the game writers to categorize each item of text will m
 
 <hr>
 
-## How to use Broccoli with your game engine?
+## How to use Broccoli?
+### For the writters
+> **Broccoli** will eventually run on a dedicated site
+You can use **Broccoli** clicking [right here](https://josemachado-dev.github.io/)!
 
-Currently, the only game engine supported is [Unity](https://unity.com/). Please take a look at our [Unity Integration folder](https://github.com/josemachado-dev/improved-broccoli/tree/master/Unity_Implementation) for a better understanding at how to use it.
-> Better documentation, soon to come!
+## How to use Broccoli with your game engine?
+### For the programmers
+
+Currently, the only game engine supported is [Unity](https://unity.com/). Please take a look at our [Unity Integration: How To](https://github.com/josemachado-dev/improved-broccoli/blob/master/UnityIntegration/Broccoli_UnityIntegration_README.md), in the [Unity_Implementation folder](https://github.com/josemachado-dev/improved-broccoli/tree/master/UnityIntegration), for a better understanding at how to use it.
+
 
 This, however, doesn't mean you can't use **Broccoli** with other game engines!
 If you find a way to extract information from .json files to other game engines, **Broccoli** will be of use to you too. It does mean, however, that you'll have to do some extra work... Sorry!
@@ -25,11 +31,9 @@ If you find a way to extract information from .json files to other game engines,
 
 ## How to install Broccoli
 
-> **Broccoli** will eventually run on a server or site, but, for now, follow this instructions to actually use the program
+Start by clonning this repository, and instaling [Node.js](https://nodejs.org/en/).
 
-After you've clonned this repository, make sure you have [Node.js](https://nodejs.org/en/) installed, and some sort of code editor, like [Visual Studio Code](https://code.visualstudio.com/).
-
-Then, run your terminal and navigate to the folder where you've clonned the repository, and open the 'broccoli' folder
+Then, run your terminal (for example, in your code editor, like [Visual Studio Code](https://code.visualstudio.com/) ) and navigate to the folder where you've clonned the repository, and open the 'broccoli' folder
 ```
 cd [Path_To_Repository]\broccoli
 ```
