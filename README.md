@@ -47,7 +47,7 @@ npm install
 <br><br>
 After that, whenever you want to run **Broccoli**, open a terminal, navigate to the `broccoli` folder, and run
 ```
-npm serve -o
+ng serve -o
 ```
 
 <hr>

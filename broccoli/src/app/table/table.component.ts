@@ -40,15 +40,18 @@ export class TableComponent {
 
   selectedFile = null;
 
-  spellcheckActive : Boolean = JSON.parse(localStorage.getItem("spellchecker"));
+  spellcheckActive : boolean = JSON.parse(localStorage.getItem("spellchecker"));
 
+  trackByIndex(col, row = undefined) {
+    return () => { return `c_${col}-r_${row}` }
+  }
 
   editColumnTitle(index, event) {
     event.stopImmediatePropagation();
     this.editColumnTitleIndex = index;
   }
 
-  addColumn(columnTitle : string = "Column Title") {
+  addColumn(columnTitle : string = "New Column") {
     if(this.rows.length == 0 && this.firstRowOrColumn){
       this.firstRowOrColumn = false;
       this.addRow();
@@ -105,6 +108,7 @@ export class TableComponent {
 
   onFileSelected(event){
     this.selectedFile = event.target.files[0];
+    //Should Show or Enable the "Open Table" Button
   }
 
   openTable(){
@@ -122,6 +126,9 @@ export class TableComponent {
       };
   
       fr.readAsText(this.selectedFile);
+
+      //Should clear Input Field File
+      //Should Hide or Disable the "Open Table" Button
     }
   }
 
@@ -134,10 +141,6 @@ export class TableComponent {
     this.addColumn("Line")
 
     this.addRow();
-  }
-
-  trackByIndex(col, row = undefined) {
-    return () => { return `c_${col}-r_${row}` }
   }
 
 }
