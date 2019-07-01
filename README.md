@@ -15,9 +15,9 @@ Besides, the hability of the game writers to categorize each item of text will m
 ## How to use Broccoli?
 _For the writters_
 <br>
-> **Broccoli** will eventually run on a dedicated site
-<br>
 You can use **Broccoli** clicking [right here](https://josemachado-dev.github.io/)!
+
+> More documentation to be added soon
 
 ## How to use Broccoli with your game engine?
 _For the programmers_
