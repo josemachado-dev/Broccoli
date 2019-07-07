@@ -1,4 +1,33 @@
-.nav_right button {
+div .navbar-container {
+    background: rgb(0, 255, 255);
+    margin-bottom: 70px;
+}
+
+nav ul.float-left{
+    float: left;
+}
+
+nav ul.float-right{
     float: right;
-    margin-left: 1em;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav ul.float-left li {
+    display: inline-block;
+    margin-right: 70px;
+}
+
+nav ul.float-right li {
+    display: inline-block;
+    margin-left: 70px;
+}
+
+nav a {
+    color: rgb(6, 179, 0);
+    text-decoration: none;
 }
