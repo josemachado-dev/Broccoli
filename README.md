@@ -13,16 +13,19 @@ Besides, the hability of the game writers to categorize each item of text will m
 <hr>
 
 ## How to use Broccoli?
-_For the writters_
-<br>
-> **Broccoli** will eventually run on a dedicated site
+_**For the writters**_
 <br>
 You can use **Broccoli** clicking [right here](https://josemachado-dev.github.io/)!
 
-## How to use Broccoli with your game engine?
-_For the programmers_
+> More documentation to be added soon
+
 <br>
-Currently, the only game engine supported is [Unity](https://unity.com/). Please take a look at our [Unity Integration: How To](https://github.com/josemachado-dev/improved-broccoli/blob/master/UnityIntegration/Broccoli_UnityIntegration_README.md), in the [Unity_Implementation folder](https://github.com/josemachado-dev/improved-broccoli/tree/master/UnityIntegration), for a better understanding at how to use it.
+
+_**For the programmers:** How to use Broccoli with your game engine?_
+<br>
+Currently, the only game engine supported is [Unity](https://unity.com/).
+<br>
+Please take a look at our [How to use Broccoli with Unity?](https://github.com/josemachado-dev/improved-broccoli/blob/master/Unity_Integration/Broccoli_UnityIntegration_README.md) file, in the [Unity_Integration folder](https://github.com/josemachado-dev/improved-broccoli/tree/master/Unity_Integration), for a better understanding at how to use it.
 
 
 This, however, doesn't mean you can't use **Broccoli** with other game engines!
