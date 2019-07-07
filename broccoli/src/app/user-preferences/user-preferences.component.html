@@ -1,10 +1,17 @@
 <div>
+  
+  <input
+    type="checkbox"
+    [(ngModel)]="darkMode"
+    (change)="darkModeStorage()"
+    value="dark"
+  > Dark Mode
+
   <input
     type="checkbox"
     [(ngModel)]="spellcheck"
-    (change)="saveStorage()"
+    (change)="spellcheckStorage()"
     value="spell"
-    checked
   > Spell Checker
   
   <br>

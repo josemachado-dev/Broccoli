@@ -17,6 +17,7 @@ export class UserPreferencesComponent implements OnInit {
 
   languages : Languages[];
   spellcheck : Boolean;
+  darkMode : Boolean;
 
   ngOnInit() {
     this.languages=[
@@ -27,12 +28,18 @@ export class UserPreferencesComponent implements OnInit {
     ]
 
     if(!localStorage.getItem("spellchecker")) {
-      this.saveStorage();
+      this.spellcheckStorage();
     }
   }
 
-  saveStorage(){
+  spellcheckStorage(){
+    this.spellcheck = !this.spellcheck;
     localStorage.setItem("spellchecker", JSON.stringify(this.spellcheck));
+  }
+
+  darkModeStorage(){
+    this.darkMode = !this.darkMode;
+    localStorage.setItem("darkMode", JSON.stringify(this.darkMode));
   }
 
 }
