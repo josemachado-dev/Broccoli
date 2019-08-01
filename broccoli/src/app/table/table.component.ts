@@ -29,9 +29,8 @@ export class TableComponent {
     this.addColumn();
   }
 
-
   tableName : string = "";
-  
+
   columns : string[] = [];
   rows : Row[] = [];
   firstRowOrColumn = true;
@@ -132,15 +131,42 @@ export class TableComponent {
     }
   }
 
-  testTemplate(){
-    //test for the implementation of Templates
-    this.columns = [];
-    this.rows = [];
+  Templates(templateName : string = "Debug"){
 
-    this.addColumn("Character");
-    this.addColumn("Line")
+    switch(templateName){
+      case "Debug":
+          this.columns = [];
+          this.rows = [];
 
-    this.addRow();
+          this.addColumn("Debug");
+
+          this.addRow();
+        break;
+
+      case "CharDialogue":
+          this.columns = [];
+          this.rows = [];
+
+          this.addColumn("Character");
+          this.addColumn("Line")
+
+          this.addRow();
+        break;
+
+      case "Caretos":
+          this.columns = [];
+          this.rows = [];
+
+          this.addColumn("Ficheiro");
+          this.addColumn("Título");
+          this.addColumn("Ficha Técnica");
+          this.addColumn("Descrição");
+
+          this.addRow();
+        break;
+    }
+
   }
+
 
 }
