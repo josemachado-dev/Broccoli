@@ -1,25 +1,21 @@
-<div>
-
-  <input
-    type="file"
-    (change)="onFileSelected($event)"
-    accept=".json">
-
-  <button
-    type="button"
-    (click)="openScript()"
-  >Open Script</button>
-
-  <br>
-
-  <button 
-    type="button"
-    (click)="saveScript()"
-  >Save Script</button>
-
-</div>
-
+<input
+  type="file"
+  (change)="onFileSelected($event)"
+  accept=".json">
+  
 <br>
+
+<button
+  type="button"
+  (click)="openScript()"
+>Open Script</button>
+
+<button 
+  type="button"
+  (click)="saveScript()"
+>Save Script</button>
+
+<br><br>
 
 <div>
 
@@ -36,5 +32,6 @@
     rows=25
     [attr.spellcheck]="spellcheckActive"
     [(ngModel)]="textareaText"
-    ></textarea>
+  ></textarea>
+
 </div>

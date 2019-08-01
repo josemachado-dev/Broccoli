@@ -1,34 +1,29 @@
-<div>
-
-  <input
-    type="file"
-    (change)="onFileSelected($event)"
-    accept=".json">
-
-  <button
-    type="button"
-    (click)="openTable()"
-  >Open Table</button>
-
-  <br>
-
-  <button 
-    type="button"
-    (click)="saveTable()"
-  >Save Table</button>
-
-</div>
+<input
+  type="file"
+  (change)="onFileSelected($event)"
+  accept=".json"
+>
 
 <br>
 
-<div>
-  <button
-    type="button"
-   (click)="testTemplate()"
-  >Test Template</button>
-</div>
+<button
+  type="button"
+  (click)="openTable()"
+>Open Table</button>
 
-<br>
+<button 
+  type="button"
+  (click)="saveTable()"
+>Save Table</button>
+
+<br><br>
+
+<button
+  type="button"
+  (click)="testTemplate()"
+>Char Dialogue Template</button>
+
+<br><br>
 
 <div>
 
@@ -39,67 +34,67 @@
   >
 
   <table>
-    <thead>
+      <thead>
 
-      <th>#</th>
+        <th>#</th>
 
-      <th
-        *ngFor="let column of columns;
-        let index = index;
-        trackBy: trackByIndex('title', index)"
-        (click)="editColumnTitle(index, $event)"
-        class="column-title"
-      >
-        <input
-          [hidden]="editColumnTitleIndex != index"
-          [(ngModel)]="columns[index]"
-          [attr.spellcheck]="spellcheckActive"
+        <th
+          *ngFor="let column of columns;
+          let index = index;
+          trackBy: trackByIndex('title', index)"
+          (click)="editColumnTitle(index, $event)"
+          class="column-title"
         >
-        <span
-          [hidden]="editColumnTitleIndex == index"
-        >{{columns[index]}}</span>
-
-        <button
-          type="button"
-          (click)="removeColumn(index)"
-        >X</button>
-      </th>
-
-      <th>
-        <button
-          type="button"
-          (click)="addColumn()"
-        >Add column</button>
-      </th>
-
-    </thead>
-
-    <tr 
-      *ngFor="let row of rows;
-      let rowIndex = index;
-      trackBy: trackByIndex(rowIndex, 'data')"
-    >
-      <td>{{rowIndex+1}}</td>
-
-      <td
-        *ngFor="let item of row.data;
-        let dataIndex = index;
-        trackBy: trackByIndex(rowIndex, dataIndex)"
-        >
-          <input 
-            [(ngModel)]="rows[rowIndex].data[dataIndex]"
+          <input
+            [hidden]="editColumnTitleIndex != index"
+            [(ngModel)]="columns[index]"
             [attr.spellcheck]="spellcheckActive"
           >
-      </td>
+          <span
+            [hidden]="editColumnTitleIndex == index"
+          >{{columns[index]}}</span>
 
-      <td>
-        <button
-          type="button"
-          (click)="removeRow(rowIndex)"
-        >X</button>
-      </td>
+          <button
+            type="button"
+            (click)="removeColumn(index)"
+          >X</button>
+        </th>
 
-    </tr>
+        <th>
+          <button
+            type="button"
+            (click)="addColumn()"
+          >Add column</button>
+        </th>
+
+      </thead>
+
+      <tr 
+        *ngFor="let row of rows;
+        let rowIndex = index;
+        trackBy: trackByIndex(rowIndex, 'data')"
+      >
+        <td>{{rowIndex+1}}</td>
+
+        <td
+          *ngFor="let item of row.data;
+          let dataIndex = index;
+          trackBy: trackByIndex(rowIndex, dataIndex)"
+          >
+            <input 
+              [(ngModel)]="rows[rowIndex].data[dataIndex]"
+              [attr.spellcheck]="spellcheckActive"
+            >
+        </td>
+
+        <td>
+          <button
+            type="button"
+            (click)="removeRow(rowIndex)"
+          >X</button>
+        </td>
+
+      </tr>
 
   </table>
 
