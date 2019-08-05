@@ -112,23 +112,28 @@ export class TableComponent {
 
   openTable(){
     if(this.selectedFile != null){
-      let fr = new FileReader();
-
-      fr.onload = (e : any) => {
-        let loadedFile = JSON.parse(e.target.result);
-
-        this.columns = loadedFile.columns;
-        this.rows = loadedFile.rows;
-        
-        //Table name = uploaded file name, minus the ".json"
-        this.tableName = this.selectedFile.name.substring( 0, this.selectedFile.name.length - 5);
-      };
+      if(confirm("Are you sure you want to open this table?\n\nATTENTION: opening a file resets the page, make sure to save your work before proceeding!\n\nPress 'Ok' to open, or 'Cancel' to be able to save first.")){
+        let fr = new FileReader();
   
-      fr.readAsText(this.selectedFile);
-
-      //Should clear Input Field File
-      //Should Hide or Disable the "Open Table" Button
+        fr.onload = (e : any) => {
+          let loadedFile = JSON.parse(e.target.result);
+  
+          this.columns = loadedFile.columns;
+          this.rows = loadedFile.rows;
+          
+          //Table name = uploaded file name, minus the ".json"
+          this.tableName = this.selectedFile.name.substring( 0, this.selectedFile.name.length - 5);
+        };
+    
+        fr.readAsText(this.selectedFile);
+  
+        //Should clear Input Field File
+        //Should Hide or Disable the "Open Table" Button
+      }else{
+        return;
+      }
     }
+
   }
 
   Templates(templateName : string = "Debug"){
