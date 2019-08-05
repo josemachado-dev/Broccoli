@@ -13,10 +13,17 @@ nav li.float-right {
 nav a {
     background-color: rgb(34, 172, 64);
     color: rgb(250, 250, 250);
-    padding: 10px 25px;
+    padding: 1em 2em;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    height: 1em;
+}
+
+nav img {
+    display: inline-block;
+    width: 1em;
+    padding-bottom: 1em;
 }
 
 nav a:hover{
