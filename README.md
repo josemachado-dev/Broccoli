@@ -12,12 +12,11 @@ Besides, the hability of the game writers to categorize each item of text will m
 
 <hr>
 
-## How to use Broccoli?
+## Using Broccoli
 _**For the writters**_
 <br>
-You can use **Broccoli** clicking [right here](https://josemachado-dev.github.io/)!
-
-> More documentation to be added soon
+You can use **Broccoli** clicking [right here](https://josemachado-dev.github.io/)! <br>
+To check the documentation on "How to use Broccoli? for Writers" follow [this link](https://github.com/josemachado-dev/improved-broccoli/wiki/How-to-use-Broccoli%3F---Writers). 
 
 <br>
 
