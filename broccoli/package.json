@@ -13,7 +13,7 @@
   "dependencies": {
     "@angular/animations": "^6.1.0",
     "@angular/common": "^6.1.0",
-    "@angular/compiler": "^20.3.25",
+    "@angular/compiler": "^20.3.27",
     "@angular/core": "^11.0.5",
     "@angular/forms": "^6.1.0",
     "@angular/http": "^6.1.0",
@@ -23,11 +23,11 @@
     "core-js": "^2.5.4",
     "file-saver": "^2.0.0",
     "rxjs": "~6.2.0",
-    "tar": "^7.5.16",
+    "tar": "^7.5.21",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^21.2.6",
+    "@angular-devkit/build-angular": "^22.1.2",
     "@angular/cli": "^7.3.9",
     "@angular/compiler-cli": "^7.2.15",
     "@angular/language-service": "^6.1.0",
